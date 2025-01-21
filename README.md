@@ -1,6 +1,6 @@
 # E-Factura
 
-E-Factura es un proyecto destinado a implementar la facturación electrónica mediante la integración con las API’s de Halltec. Este sistema busca automatizar y facilitar el proceso de facturación, garantizando el cumplimiento de las normativas legales vigentes y optimizando el flujo de trabajo de los usuarios.
+E-Factura es un proyecto destinado a implementar la facturación electrónica mediante la integración con las API’s de Factus Halltec. Este sistema busca automatizar y facilitar el proceso de facturación, garantizando el cumplimiento de las normativas legales vigentes y optimizando el flujo de trabajo de los usuarios.
 
 ## Propósito
 
@@ -38,6 +38,16 @@ La facturación electrónica es un sistema que reemplaza las facturas tradiciona
 -   **Eficiencia**: Automatiza procesos repetitivos, ahorrando tiempo y reduciendo errores humanos.
 -   **Economía**: Disminuye los costos asociados con la impresión y almacenamiento de facturas físicas.
 -   **Cumplimiento**: Asegura la conformidad con las regulaciones legales.
+
+## Uso del Proyecto
+
+Para utilizar E-Factura junto a Halltec, es necesario contactar con ellos para que proporcionen las credenciales de acceso al sistema. Esto asegura una integración segura y efectiva con las API’s de Factus Halltec.
+
+Puedes comunicarte con Halltec a través de los siguientes enlaces:
+
+-   **Sitio Oficial Halltec**: [halltec.co](https://halltec.co/)
+-   **Sitio Oficial Factus**: [factus.com.co](https://www.factus.com.co/)
+-   **Instagram Halltec**: [@halltec](https://www.instagram.com/halltec/)
 
 ## Colaboración y Desarrollo
 
