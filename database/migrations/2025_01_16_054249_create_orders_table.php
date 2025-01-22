@@ -18,6 +18,8 @@ return new class extends Migration {
 
             $table->foreign('bill_id')->references('id')->on('bills');
             $table->foreign('product_id')->references('id')->on('products');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

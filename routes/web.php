@@ -18,7 +18,7 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::prefix('Efactura')->group(function () {
+Route::prefix('Efactura')->middleware(['auth:sanctum'])->group(function () {
     Route::get('client', function () {
         return view('module.client.client');
     })->name('indexClient');

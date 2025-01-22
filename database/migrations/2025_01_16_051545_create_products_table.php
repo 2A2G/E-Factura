@@ -16,8 +16,11 @@ return new class extends Migration {
             $table->string('code_product')->unique();
             $table->string('name_product');
             $table->string('price_product');
+            $table->integer('quantity_products');
 
             $table->foreign('type_products_id')->references('id')->on('type_products');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

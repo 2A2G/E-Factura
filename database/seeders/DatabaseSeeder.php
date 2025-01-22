@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\TypeProduct;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,5 +21,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'aldair@e-factura.com',
             'password' => bcrypt('password'),
         ]);
+
+        $this->call(TypeProductSeeder::class);
+        $this->call(ProductSeeder::class);
     }
 }

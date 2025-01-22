@@ -17,7 +17,8 @@ class TypeProductFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'product_type_name' => fake()->word,
         ];
+
     }
 }
