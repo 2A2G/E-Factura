@@ -7,15 +7,15 @@ use Livewire\Component;
 class Product extends Component
 {
     public $products;
-    public $totalAgotados;
+    public $productExhausted;
 
 
     public function mount()
     {
         $this->products = ModelsProduct::withTrashed()->get();
-        $this->totalAgotados = ModelsProduct::where('quantity_products', 0)->count();
+        $this->productExhausted = ModelsProduct::where('quantity_products', 0)->count();
     }
-    
+
     public function clearInputs()
     {
 

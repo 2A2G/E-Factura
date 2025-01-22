@@ -16,7 +16,7 @@
 
             <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
                 <h3 class="text-xl font-semibold text-red-700 mb-4">Productos Agotados</h3>
-                <p class="mt-4 text-3xl font-bold text-red-600">{{ $totalAgotados }}</p>
+                <p class="mt-4 text-3xl font-bold text-red-600">{{ $productExhausted }}</p>
                 <p class="mt-2 text-gray-500">Total de productos agotados en el inventario.</p>
             </div>
 
