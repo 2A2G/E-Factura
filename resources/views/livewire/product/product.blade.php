@@ -1,27 +1,27 @@
 <div>
     <x-app-layout>
-        <!-- Barra superior con métricas de productos y categorías -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Tarjeta de Productos Totales -->
             <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
                 <h3 class="text-xl font-semibold text-gray-700 mb-4">Productos Totales</h3>
-                {{-- <p class="text-3xl font-bold text-gray-800">{{ $totalProducts }}</p> --}}
+                <p class="mt-4 text-3xl font-bold text-blue-600">{{ count($products) }}</p>
+                <p class="mt-2 text-gray-500">Total de productos.</p>
             </div>
 
-            <!-- Tarjeta de Categorías Totales -->
             <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                <h3 class="text-xl font-semibold text-gray-700 mb-4">Categorías Totales</h3>
-                {{-- <p class="text-3xl font-bold text-gray-800">{{ $totalCategories }}</p> --}}
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Productos Activos</h3>
+                <p class="mt-4 text-3xl font-bold text-green-600">
+                    {{ \App\Models\Product::whereNull('deleted_at')->count() }}</p>
+                <p class="mt-2 text-gray-500">Total de productos disponibles en el inventario.</p>
             </div>
 
-            <!-- Tarjeta de Productos por Categoría -->
             <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                <h3 class="text-xl font-semibold text-gray-700 mb-4">Productos por Categoría</h3>
-                {{-- <p class="text-3xl font-bold text-gray-800">{{ $productsInCategories }}</p> --}}
+                <h3 class="text-xl font-semibold text-red-700 mb-4">Productos Agotados</h3>
+                <p class="mt-4 text-3xl font-bold text-red-600">{{ $totalAgotados }}</p>
+                <p class="mt-2 text-gray-500">Total de productos agotados en el inventario.</p>
             </div>
+
         </div>
 
-        <!-- Barra de acción para agregar nueva categoría -->
         <div class="flex justify-between items-center bg-white p-4 rounded-lg shadow-md border border-gray-200 mt-6">
             <h2 class="text-2xl font-semibold text-gray-700">Productos</h2>
             <div>
@@ -31,47 +31,63 @@
             </div>
         </div>
 
-        <!-- Filtro de búsqueda de categorías -->
         <div class="bg-white p-4 rounded-lg shadow-lg border border-gray-200 mt-4">
             <input type="text" class="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="Buscar por nombre de categoría..." wire:model="search">
         </div>
 
-        <!-- Tabla de Categorías -->
         <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 mt-6">
-            <table class="min-w-full text-sm text-left text-gray-500">
+            <table class="min-w-full text-sm text-left text-gray-500 border-collapse">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="px-6 py-4 font-medium text-gray-900">Categoría</th>
-                        <th class="px-6 py-4 font-medium text-gray-900">Productos</th>
-                        <th class="px-6 py-4 font-medium text-gray-900">Acciones</th>
+                        <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Categoría</th>
+                        <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Código</th>
+                        <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Producto</th>
+                        <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Cantidad</th>
+                        <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Estado</th>
+                        <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Acción</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach ($categories as $category)
+                    @foreach ($products as $product)
                         <tr class="border-t hover:bg-gray-50">
-                            <td class="px-6 py-4 font-medium text-gray-900">{{ $category->name }}</td>
-                            <td class="px-6 py-4">{{ $category->products_count }} productos</td>
-                            <td class="px-6 py-4">
-                                <button class="text-blue-500 hover:underline"
-                                    wire:click="viewCategoryDetails({{ $category->id }})">Ver Detalles</button>
-                                <button class="ml-2 text-yellow-500 hover:underline"
-                                    wire:click="openEditCategoryModal({{ $category->id }})">Editar</button>
-                                <button class="ml-2 text-red-500 hover:underline"
-                                    wire:click="confirmDeleteCategory({{ $category->id }})">Eliminar</button>
-                                <button class="ml-2 text-green-500 hover:underline"
-                                    wire:click="addProduct({{ $category->id }})">Agregar Producto</button>
+                            <td class="px-4 py-3 text-center font-medium text-gray-900">
+                                {{ $product->typeProduct->product_type_name }}
+                            </td>
+                            <td class="px-4 py-3 text-center">{{ $product->code_product }}</td>
+                            <td class="px-4 py-3 text-center">{{ $product->name_product }}</td>
+                            <td class="px-4 py-3 text-center">
+                                {{ $product->quantity_products > 0 ? $product->quantity_products : 'Agotado' }}
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                                <span
+                                    class="inline-block px-3 py-1 text-xs font-semibold rounded-full {{ $product->deleted_at ? 'bg-red-500 text-white' : 'bg-blue-500 text-white' }}">
+                                    {{ $product->deleted_at ? 'Eliminado' : 'Activo' }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                                @if (!$product->deleted_at)
+                                    <button wire:click="openModalUpdateCategory({{ $product->id }})"
+                                        class="px-2 py-1 text-sm font-medium text-blue-600 hover:text-blue-800">
+                                        Ver Detalles
+                                    </button>
+                                    <button wire:click="openModalDeleteCategory({{ $product->id }})"
+                                        class="px-2 py-1 text-sm font-medium text-red-600 hover:text-red-800">
+                                        Eliminar
+                                    </button>
+                                @else
+                                    <span class="text-gray-400 text-sm cursor-not-allowed">Eliminado</span>
+                                @endif
                             </td>
                         </tr>
-                    @endforeach --}}
+                    @endforeach
                 </tbody>
             </table>
         </div>
 
-        <!-- Modal para Agregar/Editar Categoría o Producto -->
+
         <x-modal wire:model="isModalOpen">
             <div class="p-6">
-                {{-- <h3 class="text-2xl font-semibold text-gray-700">{{ $modalTitle }}</h3> --}}
                 <form wire:submit.prevent="saveCategory">
                     <div class="mt-4">
                         <label class="block text-sm font-medium text-gray-700">Nombre de la Categoría</label>
@@ -88,5 +104,6 @@
                 </form>
             </div>
         </x-modal>
+
     </x-app-layout>
 </div>

@@ -55,7 +55,7 @@
                                     <td class="px-4 py-2 text-center align-middle">
                                         <button wire:click="openModalUpdateCategory({{ $typeProduct->id }})"
                                             class="text-blue-600 hover:text-blue-800 mr-4">
-                                            Ver/Editar
+                                            Ver Detalles
                                         </button>
                                         @if (!$typeProduct->deleted_at)
                                             <button wire:click="openModalDeleteCategory({{ $typeProduct->id }})"
