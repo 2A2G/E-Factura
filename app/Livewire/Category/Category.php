@@ -42,31 +42,6 @@ class Category extends Component
         $this->openCategory = true;
     }
 
-    public function openModalDeleteCategory($id_typeProdct)
-    {
-        $this->clearInputs();
-        $this->typeProduct = TypeProduct::withTrashed()->find($id_typeProdct);
-        $this->openDeleteCategory = true;
-    }
-
-    public function openModalUpdateCategory($id_typeProdct)
-    {
-        $this->clearInputs();
-        $this->typeProduct = TypeProduct::withTrashed()->find($id_typeProdct);
-
-        if ($this->typeProduct) {
-            $this->product_type_name = $this->typeProduct->product_type_name;
-
-            $this->estado = $this->typeProduct->trashed() ? 'Eliminado' : 'Activo';
-
-            $this->openUpdateCategory = true;
-        } else {
-            $this->estado = '';
-            $this->openUpdateCategory = false;
-        }
-
-    }
-
     public function store()
     {
         try {
@@ -94,35 +69,63 @@ class Category extends Component
         }
     }
 
+    public function openModalUpdateCategory($id_typeProdct)
+    {
+        $this->clearInputs();
+        $this->typeProduct = TypeProduct::withTrashed()->where('id', $id_typeProdct)->first();
+
+        if ($this->typeProduct) {
+            $this->product_type_name = $this->typeProduct->product_type_name;
+            $this->estado = $this->typeProduct->trashed() ? 'Eliminado' : 'Activo';
+            $this->openUpdateCategory = true;
+        } else {
+            $this->estado = '';
+            $this->openUpdateCategory = false;
+        }
+    }
+
     public function update()
     {
         try {
             $this->validate([
                 'product_type_name' => 'required|string|max:255',
             ]);
-            $this->openUpdateCategory = false;
 
-            if ($this->estado == "eliminar") {
-                $this->typeProduct->delete();
+            $typeProduct = TypeProduct::withTrashed()->where('id', $this->typeProduct->id)->first();
 
-            } else {
-                $this->typeProduct->product_type_name = $this->product_type_name;
-                $this->typeProduct->save();
-
-                if ($this->typeProduct->trashed()) {
-                    $this->typeProduct->restore();
-                }
+            if (!$typeProduct) {
+                $this->openUpdateCategory = false;
+                $this->dispatch('post-error', name: "No se encontró el registro de la categoría, inténtelo nuevamente.");
+                $this->clearInputs();
+                return;
             }
 
+            if ($this->estado == "Eliminado") {
+                $typeProduct->delete();
+            } else {
+                $typeProduct->restore();
+            }
+
+            $typeProduct->update([
+                'product_type_name' => $this->product_type_name,
+            ]);
+
             $this->clearInputs();
-            $this->dispatch('post-update', name: "La categoria " . $this->product_type_name . ", se ha actualizado con exito");
+            $this->dispatch('post-update', name: "La categoría " . $this->product_type_name . " se ha actualizado con éxito.");
 
         } catch (\Throwable $th) {
             $this->openUpdateCategory = false;
             $this->clearInputs();
-            $this->dispatch('post-deleted', name: "Hubo un error al eliminar la categoría: " . $th->getMessage());
-            Log::error('Error al eliminar categoría: ' . $th->getMessage());
+            $this->dispatch('post-error', name: "Hubo un error al intentar actualizar la categoría. Inténtelo de nuevo.");
+            Log::error('Error al actualizar categoría: ' . $th->getMessage());
         }
+    }
+
+    public function openModalDeleteCategory($id_typeProdct)
+    {
+        $this->clearInputs();
+        $this->typeProduct = TypeProduct::withTrashed()->find($id_typeProdct);
+        $this->openDeleteCategory = true;
     }
 
     public function delete()

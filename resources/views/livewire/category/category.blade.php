@@ -115,7 +115,8 @@
                         <option value="Eliminado">Eliminado</option>
                     </select>
                 </div>
-                <button wire:click="store" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                <button wire:click="update"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                     Actualizar Categoría
                 </button>
             </x-slot>
