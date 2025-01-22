@@ -17,11 +17,17 @@ class Category extends Component
     public $openDeleteCategory = false;
     public $openUpdateCategory = false;
     public $product_type_name;
+    public $estado = '';
 
     public function clearInputs()
     {
-        $this->product_type_name;
-        $this->typeProduct;
+        $this->mount();
+        $this->openCategory = false;
+        $this->openDeleteCategory = false;
+        $this->openUpdateCategory = false;
+        $this->product_type_name = null;
+        $this->typeProduct = null;
+        $this->estado = '';
     }
 
     public function mount()
@@ -32,20 +38,32 @@ class Category extends Component
 
     public function openModalCategory()
     {
+        $this->clearInputs();
         $this->openCategory = true;
     }
 
     public function openModalDeleteCategory($id_typeProdct)
     {
+        $this->clearInputs();
         $this->typeProduct = TypeProduct::withTrashed()->find($id_typeProdct);
         $this->openDeleteCategory = true;
     }
 
     public function openModalUpdateCategory($id_typeProdct)
     {
+        $this->clearInputs();
         $this->typeProduct = TypeProduct::withTrashed()->find($id_typeProdct);
-        $this->product_type_name = $this->typeProduct->product_type_name;
-        $this->openUpdateCategory = true;
+
+        if ($this->typeProduct) {
+            $this->product_type_name = $this->typeProduct->product_type_name;
+
+            $this->estado = $this->typeProduct->trashed() ? 'Eliminado' : 'Activo';
+
+            $this->openUpdateCategory = true;
+        } else {
+            $this->estado = '';
+            $this->openUpdateCategory = false;
+        }
 
     }
 
@@ -67,7 +85,7 @@ class Category extends Component
             $this->clearInputs();
             $this->openCategory = false;
 
-            $this->mount();
+
         } catch (\Throwable $th) {
             $this->openCategory = false;
             $this->dispatch('post-error', name: "Error al registrar la categoria. inténtelo de nuevo");
@@ -78,8 +96,33 @@ class Category extends Component
 
     public function update()
     {
-        $this->openUpdateCategory = true;
+        try {
+            $this->validate([
+                'product_type_name' => 'required|string|max:255',
+            ]);
+            $this->openUpdateCategory = false;
 
+            if ($this->estado == "eliminar") {
+                $this->typeProduct->delete();
+
+            } else {
+                $this->typeProduct->product_type_name = $this->product_type_name;
+                $this->typeProduct->save();
+
+                if ($this->typeProduct->trashed()) {
+                    $this->typeProduct->restore();
+                }
+            }
+
+            $this->clearInputs();
+            $this->dispatch('post-update', name: "La categoria " . $this->product_type_name . ", se ha actualizado con exito");
+
+        } catch (\Throwable $th) {
+            $this->openUpdateCategory = false;
+            $this->clearInputs();
+            $this->dispatch('post-deleted', name: "Hubo un error al eliminar la categoría: " . $th->getMessage());
+            Log::error('Error al eliminar categoría: ' . $th->getMessage());
+        }
     }
 
     public function delete()
@@ -91,14 +134,13 @@ class Category extends Component
             $this->dispatch('post-deleted', name: "Se ha eliminado satisfactoriamente la categoría");
 
             $this->clearInputs();
-            $this->mount();
 
         } catch (\Throwable $th) {
+            $this->clearInputs();
             $this->dispatch('post-deleted', name: "Hubo un error al eliminar la categoría: " . $th->getMessage());
             Log::error('Error al eliminar categoría: ' . $th->getMessage());
         }
     }
-
 
     public function render()
     {
