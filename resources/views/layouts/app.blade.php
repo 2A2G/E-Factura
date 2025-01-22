@@ -34,7 +34,7 @@
             </div>
         </main>
     </div>
-
+    <x-alert-component />
     @stack('modals')
 
     @livewireScripts

@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('name_client');
             $table->string('phone_client');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

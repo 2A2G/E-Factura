@@ -12,7 +12,9 @@ return new class extends Migration {
     {
         Schema::create('type_products', function (Blueprint $table) {
             $table->id();
-            $table->string('product_type_name');
+            $table->string('product_type_name')->unique();
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

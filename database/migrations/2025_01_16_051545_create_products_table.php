@@ -18,6 +18,8 @@ return new class extends Migration {
             $table->string('price_product');
 
             $table->foreign('type_products_id')->references('id')->on('type_products');
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -3,28 +3,17 @@
         <div class="flex flex-col space-y-6">
 
             <!-- Estadísticas del Panel -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2a gap-6">
                 <!-- Total de Clientes -->
                 <div class="bg-white p-6 rounded-lg shadow-lg">
                     <h2 class="text-xl font-semibold text-gray-800">Total de Clientes</h2>
-                    {{-- <p class="text-3xl font-bold text-blue-600">{{ $totalClients }}</p> --}}
+                    <p class="text-3xl font-bold text-blue-600">{{ count($clients) }}</p>
                 </div>
 
                 <!-- Total de Compras -->
                 <div class="bg-white p-6 rounded-lg shadow-lg">
                     <h2 class="text-xl font-semibold text-gray-800">Total de Compras</h2>
-                    {{-- <p class="text-3xl font-bold text-green-600">{{ $totalPurchases }}</p> --}}
-                </div>
-
-                <!-- Productos Más Vendidos -->
-                <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <h2 class="text-xl font-semibold text-gray-800">Productos Más Vendidos</h2>
-                    <ul class="space-y-2">
-                        {{-- @foreach ($topSellingProducts as $product)
-                            <li class="text-sm text-gray-600">{{ $product->name }} - {{ $product->sales_count }} ventas
-                            </li>
-                        @endforeach --}}
-                    </ul>
+                    <p class="text-3xl font-bold text-green-600">{{ count($totalOrder) }}</p>
                 </div>
 
             </div>
