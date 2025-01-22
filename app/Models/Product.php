@@ -13,7 +13,11 @@ class Product extends Model
 
 
     protected $fillable = [
-
+        'type_products_id',
+        'code_product',
+        'name_product',
+        'price_product',
+        'quantity_products'
     ];
 
     public function typeProduct()
