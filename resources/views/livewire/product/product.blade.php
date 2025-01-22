@@ -27,7 +27,7 @@
             <div>
                 <button
                     class="px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 focus:outline-none"
-                    wire:click="openCreateCategoryModal">Agregar Productos</button>
+                    wire:click="openCreateProduct">Agregar Productos</button>
             </div>
         </div>
 
@@ -86,24 +86,112 @@
         </div>
 
 
-        <x-modal wire:model="isModalOpen">
-            <div class="p-6">
-                <form wire:submit.prevent="saveCategory">
-                    <div class="mt-4">
-                        <label class="block text-sm font-medium text-gray-700">Nombre de la Categoría</label>
-                        <input type="text" class="mt-2 w-full p-3 border border-gray-300 rounded-lg"
-                            wire:model="categoryName" required>
-                    </div>
-                    <div class="mt-4 flex justify-end">
-                        <button type="button"
-                            class="px-4 py-2 bg-gray-500 text-white rounded-lg shadow-md hover:bg-gray-600"
-                            wire:click="closeModal">Cancelar</button>
-                        <button type="submit"
-                            class="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600">Guardar</button>
-                    </div>
-                </form>
-            </div>
-        </x-modal>
+        <x-dialog-modal wire:model="openProduct" class="fixed inset-0 flex items-center justify-center z-50">
+            <x-slot name="title">
+                <h1 class="text-lg font-medium">Registrar Producto</h1>
+            </x-slot>
+            <x-slot name="content">
+                <div class="mb-4">
+                    <label for="type_products_id" class="block text-gray-600 font-semibold mb-2 text-left">Tipo de
+                        Producto</label>
+                    <select id="type_products_id" wire:model="type_products_id"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                        <option value="">Selecciona un tipo</option>
+                        @foreach ($typeProducts as $typeProduct)
+                            <option value="{{ $typeProduct->id }}">{{ $typeProduct->product_type_name }}</option>
+                        @endforeach
+                    </select>
+                    @error('type_products_id')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="code_product" class="block text-gray-600 font-semibold mb-2 text-left">Código del
+                        Producto</label>
+                    <input id="code_product" type="text" wire:model="code_product"
+                        class="border border-gray-300 rounded px-3 py-2 w-full" placeholder="Ejemplo: DVU-8896"
+                        maxlength="8" oninput="formatCodeProduct(this)" pattern="^[A-Z0-9-]+$"
+                        title="El código no puede contener espacios ni caracteres especiales">
+                    @error('code_product')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <script>
+                    function formatCodeProduct(input) {
+                        let value = input.value.toUpperCase();
+
+                        value = value.replace(/[^A-Z0-9]/g, '');
+
+                        if (value.length > 3) {
+                            value = value.slice(0, 3) + '-' + value.slice(3, 8);
+                        }
+                        if (value.length > 8) {
+                            value = value.slice(0, 8);
+                        }
+                        input.value = value;
+                    }
+                </script>
+
+                <div class="mb-4">
+                    <label for="name_product" class="block text-gray-600 font-semibold mb-2 text-left">Nombre del
+                        Producto</label>
+                    <input id="name_product" type="text" wire:model="name_product"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                    @error('name_product')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="price_product" class="block text-gray-600 font-semibold mb-2 text-left">Precio del
+                        Producto</label>
+                    <input id="price_product" type="number" wire:model="price_product"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                    @error('price_product')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="quantity_products" class="block text-gray-600 font-semibold mb-2 text-left">Cantidad del
+                        Producto</label>
+                    <input id="quantity_products" type="number" wire:model="quantity_products"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                    @error('quantity_products')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+            </x-slot>
+
+            <x-slot name="footer">
+                <div class="flex justify-end">
+                    <button wire:click="store"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        Guardar Producto
+                    </button>
+                </div>
+            </x-slot>
+        </x-dialog-modal>
+
+
+
+        <x-dialog-modal wire:model="openDeleteCategory" class="fixed inset-0 flex items-center justify-center">
+            <x-slot name="title">
+                <h1 class="text-lg font-semibold">¿Eliminar Categoría?</h1>
+            </x-slot>
+            <x-slot name="content">
+                <p class="text-gray-700 text-center mb-4">Esta acción no se puede deshacer.</p>
+                <div class="flex justify-center gap-4">
+                    <button wire:click="$set('openDeleteCategory', false)"
+                        class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Cancelar</button>
+                    <button wire:click="delete" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                        Eliminar
+                    </button>
+                </div>
+            </x-slot>
+        </x-dialog-modal>
 
     </x-app-layout>
 </div>
