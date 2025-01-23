@@ -66,12 +66,12 @@
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-center">
+                                <button type="button" wire:click="openUpdateProduct('{{ $product->code_product }}')"
+                                    class="px-2 py-1 text-sm font-medium text-blue-600 hover:text-blue-800">
+                                    Ver Detalles
+                                </button>
                                 @if (!$product->deleted_at)
-                                    <button wire:click="openModalUpdateCategory({{ $product->id }})"
-                                        class="px-2 py-1 text-sm font-medium text-blue-600 hover:text-blue-800">
-                                        Ver Detalles
-                                    </button>
-                                    <button wire:click="openModalDeleteCategory({{ $product->id }})"
+                                    <button wire:click="openDeleteCategory({{ $product->id }})"
                                         class="px-2 py-1 text-sm font-medium text-red-600 hover:text-red-800">
                                         Eliminar
                                     </button>
@@ -175,7 +175,104 @@
             </x-slot>
         </x-dialog-modal>
 
+        <x-dialog-modal wire:model="openUpdate" class="fixed inset-0 flex items-center justify-center z-50">
+            <x-slot name="title">
+                <h1 class="text-lg font-medium">Actualizar Producto</h1>
+            </x-slot>
+            <x-slot name="content">
+                <div class="mb-4">
+                    <label for="type_products_id" class="block text-gray-600 font-semibold mb-2 text-left">Tipo de
+                        Producto</label>
+                    <select id="type_products_id" wire:model="type_products_id"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                        <option value="">Selecciona un tipo</option>
+                        @foreach ($typeProducts as $typeProduct)
+                            <option value="{{ $typeProduct->id }}">{{ $typeProduct->product_type_name }}</option>
+                        @endforeach
+                    </select>
+                    @error('type_products_id')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
 
+                <div class="mb-4">
+                    <label for="code_product" class="block text-gray-600 font-semibold mb-2 text-left">Código del
+                        Producto</label>
+                    <input id="code_product" type="text" wire:model="code_product"
+                        class="border border-gray-300 rounded px-3 py-2 w-full" placeholder="Ejemplo: DVU-8896"
+                        maxlength="8" oninput="formatCodeProduct(this)" pattern="^[A-Z0-9-]+$"
+                        title="El código no puede contener espacios ni caracteres especiales">
+                    @error('code_product')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <script>
+                    function formatCodeProduct(input) {
+                        let value = input.value.toUpperCase();
+
+                        value = value.replace(/[^A-Z0-9]/g, '');
+
+                        if (value.length > 3) {
+                            value = value.slice(0, 3) + '-' + value.slice(3, 8);
+                        }
+                        if (value.length > 8) {
+                            value = value.slice(0, 8);
+                        }
+                        input.value = value;
+                    }
+                </script>
+
+                <div class="mb-4">
+                    <label for="name_product" class="block text-gray-600 font-semibold mb-2 text-left">Nombre del
+                        Producto</label>
+                    <input id="name_product" type="text" wire:model="name_product"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                    @error('name_product')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="price_product" class="block text-gray-600 font-semibold mb-2 text-left">Precio del
+                        Producto</label>
+                    <input id="price_product" type="number" wire:model="price_product"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                    @error('price_product')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="quantity_products" class="block text-gray-600 font-semibold mb-2 text-left">Cantidad
+                        del
+                        Producto</label>
+                    <input id="quantity_products" type="number" wire:model="quantity_products"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                    @error('quantity_products')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="mb-4">
+                    <label for="action" class="block text-gray-600 font-semibold mb-2 text-left">Estado</label>
+                    <select id="action" wire:model="estado"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Activo">Activo</option>
+                        <option value="Eliminado">Eliminado</option>
+                    </select>
+                </div>
+            </x-slot>
+
+            <x-slot name="footer">
+                <div class="flex justify-end">
+                    <button wire:click="update"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        Actualizar Producto
+                    </button>
+                </div>
+            </x-slot>
+        </x-dialog-modal>
 
         <x-dialog-modal wire:model="openDeleteCategory" class="fixed inset-0 flex items-center justify-center">
             <x-slot name="title">

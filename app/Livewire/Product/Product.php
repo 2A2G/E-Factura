@@ -18,6 +18,8 @@ class Product extends Component
     public $price_product;
     public $quantity_products;
     public $openProduct = false;
+    public $openUpdate = false;
+    public $estado = '';
 
     public function mount()
     {
@@ -30,13 +32,16 @@ class Product extends Component
     {
         $this->mount();
         $this->openProduct = false;
+        $this->openUpdate = false;
+
         $this->type_products_id = null;
         $this->code_product = null;
         $this->name_product = null;
         $this->price_product = null;
         $this->quantity_products = null;
-
+        $this->estado = '';
     }
+
     public function openCreateProduct()
     {
         $this->openProduct = true;
@@ -71,8 +76,83 @@ class Product extends Component
 
         } catch (\Throwable $th) {
             $this->clearInputs();
-
             $this->dispatch('post-error', name: "Hubo un error al registrar el producto. Intentelo nuevamente" . $th->getMessage());
+        }
+    }
+
+    public function openUpdateProduct($code_product)
+    {
+        try {
+            $product = ModelsProduct::withTrashed()->where('code_product', $code_product)->first();
+
+            if (!$product) {
+                $this->dispatch('post-error', name: "Error: Producto con código $code_product no encontrado. Inténtelo nuevamente.");
+                $this->clearInputs();
+                return;
+            }
+
+            $this->type_products_id = $product->type_products_id;
+            $this->code_product = $product->code_product;
+            $this->name_product = $product->name_product;
+            $this->price_product = $product->price_product;
+            $this->quantity_products = $product->quantity_products;
+
+            $this->estado = $product->trashed() ? 'Eliminado' : 'Activo';
+            $this->openUpdate = true;
+
+        } catch (\Throwable $th) {
+            $this->dispatch('post-error', name: "Error al cargar el producto con código $code_product. Inténtelo nuevamente.");
+            $this->clearInputs();
+            throw $th;
+        }
+    }
+
+    public function update()
+    {
+        try {
+            $this->validate([
+                'type_products_id' => 'required|integer',
+                'code_product' => 'required|regex:/^[A-Z0-9-]{8}$/',
+                'name_product' => 'required|string|max:255',
+                'price_product' => 'required|integer|min:0',
+                'quantity_products' => 'required|integer|min:0',
+            ]);
+
+            $product = ModelsProduct::withTrashed()->where('code_product', $this->code_product)->first();
+
+            if (!$product) {
+                $this->dispatch('post-warning', name: "Error: Producto con código $this->code_product no encontrado. Inténtelo nuevamente.");
+                $this->clearInputs();
+                return;
+            }
+
+            $formattedCode = strtoupper(preg_replace('/[^A-Z0-9]/', '', $this->code_product));
+            if (strlen($formattedCode) > 3) {
+                $formattedCode = substr($formattedCode, 0, 3) . '-' . substr($formattedCode, 3, 4);
+            }
+
+            $product->update([
+                'type_products_id' => $this->type_products_id,
+                'code_product' => $formattedCode,
+                'name_product' => $this->name_product,
+                'price_product' => $this->price_product,
+                'quantity_products' => $this->quantity_products,
+            ]);
+
+            if ($this->estado == "Eliminado") {
+                $product->delete();
+            } else {
+                $product->restore();
+            }
+
+            $this->dispatch('post-created', name: "El producto " . $this->code_product . ", ha sido actualizado exitosamente");
+            $this->clearInputs();
+
+
+        } catch (\Throwable $th) {
+            $this->dispatch('post-error', name: "Hubo un error al actualizar el producto " . $this->code_product . ". Intentelo nuevamente");
+            $this->clearInputs();
+            throw $th;
         }
     }
 
