@@ -21,7 +21,7 @@ class ProductFactory extends Factory
             'type_products_id' => TypeProduct::inRandomOrder()->first()->id ?? 1,
             'code_product' => fake()->regexify('[A-Z]{3}-[0-9]{4}'),
             'name_product' => fake()->words(3, true),
-            'price_product' => fake()->randomFloat(2, 10, 1000),
+            'price_product' => number_format(fake()->randomFloat(0, 2000, 100000), 0, ',', '.'),
             'quantity_products' => fake()->numberBetween(1, 500),
         ];
 

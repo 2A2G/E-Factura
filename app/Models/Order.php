@@ -12,7 +12,10 @@ class Order extends Model
     use SoftDeletes;
 
     protected $fillable = [
-
+        'bill_id',
+        'product_id',
+        'amount',
+        'total_price',
     ];
 
     public function product()

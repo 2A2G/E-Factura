@@ -9,7 +9,6 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class Product extends Component
 {
-    public $products;
     public $typeProducts;
     public $productExhausted;
     public $type_products_id;
@@ -24,7 +23,6 @@ class Product extends Component
 
     public function mount()
     {
-        $this->products = ModelsProduct::withTrashed()->get();
         $this->productExhausted = ModelsProduct::where('quantity_products', 0)->count();
         $this->typeProducts = TypeProduct::all();
     }
@@ -205,6 +203,8 @@ class Product extends Component
 
     public function render()
     {
-        return view('livewire.product.product');
+        return view('livewire.product.product', [
+            'products' => ModelsProduct::withTrashed()->paginate(10),
+        ]);
     }
 }

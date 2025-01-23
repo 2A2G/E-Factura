@@ -10,7 +10,6 @@ use Mockery\Matcher\Type;
 
 class Category extends Component
 {
-    public $typeProducts;
     public $typeProduct;
     public $totalProduct;
     public $openCategory = false;
@@ -32,7 +31,6 @@ class Category extends Component
 
     public function mount()
     {
-        $this->typeProducts = TypeProduct::withTrashed()->get();
         $this->totalProduct = Product::withTrashed()->get();
     }
 
@@ -147,7 +145,9 @@ class Category extends Component
 
     public function render()
     {
-        return view('livewire.category.category');
+        return view('livewire.category.category', [
+            'typeProducts' => TypeProduct::withTrashed()->paginate(10),
+        ]);
     }
 }
 

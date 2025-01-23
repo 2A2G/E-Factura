@@ -44,6 +44,7 @@
                         <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Código</th>
                         <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Producto</th>
                         <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Cantidad</th>
+                        <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Precio Unitario</th>
                         <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Estado</th>
                         <th scope="col" class="px-4 py-3 font-medium text-gray-900 text-center">Acción</th>
                     </tr>
@@ -62,6 +63,8 @@
                                     {{ $product->quantity_products > 0 ? $product->quantity_products : 'Agotado' }}
                                 </span>
                             </td>
+                            <td class="px-4 py-3 text-center">${{ number_format($product->quantity_products, 3) }}</td>
+
 
                             <td class="px-4 py-3 text-center">
                                 <span
@@ -71,7 +74,7 @@
                             </td>
                             <td class="px-4 py-3 text-center">
                                 <button type="button" wire:click="openUpdateProduct('{{ $product->code_product }}')"
-                                    class="px-2 py-1 text-sm font-medium text-blue-600 hover:text-blue-800">
+                                    class="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800">
                                     Ver Detalles
                                 </button>
                                 @if (!$product->deleted_at)
@@ -87,6 +90,9 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="mt-4">
+                {{ $products->links() }}
+            </div>
         </div>
 
 
@@ -159,7 +165,8 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="quantity_products" class="block text-gray-600 font-semibold mb-2 text-left">Cantidad del
+                    <label for="quantity_products" class="block text-gray-600 font-semibold mb-2 text-left">Cantidad
+                        del
                         Producto</label>
                     <input id="quantity_products" type="number" wire:model="quantity_products"
                         class="border border-gray-300 rounded px-3 py-2 w-full">
