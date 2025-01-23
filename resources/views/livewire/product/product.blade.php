@@ -71,7 +71,7 @@
                                     Ver Detalles
                                 </button>
                                 @if (!$product->deleted_at)
-                                    <button wire:click="openDeleteCategory({{ $product->id }})"
+                                    <button wire:click="openDeleteCategory('{{ $product->code_product }}')"
                                         class="px-2 py-1 text-sm font-medium text-red-600 hover:text-red-800">
                                         Eliminar
                                     </button>
@@ -274,14 +274,14 @@
             </x-slot>
         </x-dialog-modal>
 
-        <x-dialog-modal wire:model="openDeleteCategory" class="fixed inset-0 flex items-center justify-center">
+        <x-dialog-modal wire:model="openDelete" class="fixed inset-0 flex items-center justify-center">
             <x-slot name="title">
                 <h1 class="text-lg font-semibold">¿Eliminar Categoría?</h1>
             </x-slot>
             <x-slot name="content">
                 <p class="text-gray-700 text-center mb-4">Esta acción no se puede deshacer.</p>
                 <div class="flex justify-center gap-4">
-                    <button wire:click="$set('openDeleteCategory', false)"
+                    <button wire:click="$set('openDelete', false)"
                         class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Cancelar</button>
                     <button wire:click="delete" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
                         Eliminar

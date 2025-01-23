@@ -19,6 +19,7 @@ class Product extends Component
     public $quantity_products;
     public $openProduct = false;
     public $openUpdate = false;
+    public $openDelete = false;
     public $estado = '';
 
     public function mount()
@@ -33,6 +34,7 @@ class Product extends Component
         $this->mount();
         $this->openProduct = false;
         $this->openUpdate = false;
+        $this->openDelete = false;
 
         $this->type_products_id = null;
         $this->code_product = null;
@@ -156,6 +158,50 @@ class Product extends Component
         }
     }
 
+    public function openDeleteCategory($code_product)
+    {
+        try {
+            $product = ModelsProduct::withTrashed()->where('code_product', $code_product)->first();
+
+            if (!$product) {
+                $this->dispatch('post-error', name: "Error: Producto con código $code_product no encontrado. Inténtelo nuevamente.");
+                $this->clearInputs();
+                return;
+            }
+
+            $this->openDelete = true;
+            $this->code_product = $product->code_product;
+
+        } catch (\Throwable $th) {
+            $this->dispatch('post-error', name: "Error al cargar el producto con código $code_product. Inténtelo nuevamente.");
+            $this->clearInputs();
+            throw $th;
+        }
+    }
+
+    public function delete()
+    {
+        try {
+            $product = ModelsProduct::where('code_product', $this->code_product)->first();
+
+            if (!$product) {
+                $this->dispatch('post-error', name: "Error: Producto con código $this->code_product no encontrado. Inténtelo nuevamente.");
+                $this->clearInputs();
+                return;
+            }
+            $product->delete();
+            $this->clearInputs();
+            $this->dispatch('post-created', name: "El producto se ha eliminado correctamente");
+
+        } catch (\Throwable $th) {
+            $this->dispatch('post-error', name: "Error al cargar el producto con código $this->code_product. Inténtelo nuevamente.");
+            $this->clearInputs();
+            throw $th;
+        }
+
+
+
+    }
 
     public function render()
     {
