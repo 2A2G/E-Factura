@@ -6,26 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Order extends Model
+class PaymentMethod extends Model
 {
+    /** @use HasFactory<\Database\Factories\PaymentMethodFactory> */
     use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
         'bill_id',
-        'product_id',
-        'amount',
-        'total_price',
+        'payment_method',
+        'bank_type',
+        'credit_card_type'
     ];
 
-    public function product()
-    {
-        $this->belongsTo(Product::class);
-    }
-    public function client()
-    {
-        $this->belongsTo(Client::class);
-    }
     public function bill()
     {
         $this->belongsTo(Bill::class);

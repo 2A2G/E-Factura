@@ -11,7 +11,6 @@ class Product extends Model
     use HasFactory;
     use SoftDeletes;
 
-
     protected $fillable = [
         'type_products_id',
         'code_product',
@@ -22,7 +21,7 @@ class Product extends Model
 
     public function typeProduct()
     {
-        $this->belongsTo(TypeProduct::class);
+        return $this->belongsTo(TypeProduct::class, 'type_products_id');
     }
 
     public function order()

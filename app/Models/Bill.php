@@ -28,4 +28,9 @@ class Bill extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+    public function paymentMethod()
+    {
+        return $this->hasMany(PaymentMethod::class);
+    }
 }

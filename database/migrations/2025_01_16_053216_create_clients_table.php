@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('email_client')->unique();
             $table->string('name_client');
             $table->string('phone_client');
+            $table->string('address_client');
 
             $table->softDeletes();
             $table->timestamps();
