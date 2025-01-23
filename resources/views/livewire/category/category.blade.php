@@ -2,7 +2,7 @@
     <x-app-layout>
         <div class="flex-1 p-6 ml-4">
             <div class="max-w-7xl mx-auto space-y-6">
-                <h1 class="text-3xl font-semibold text-gray-900">Panel Administrativo del Supermercado</h1>
+
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">

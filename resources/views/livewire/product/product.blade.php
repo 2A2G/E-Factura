@@ -2,7 +2,7 @@
     <x-app-layout>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                <h3 class="text-xl font-semibold text-gray-700 mb-4">Productos Totales</h3>
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Total de Productos</h3>
                 <p class="mt-4 text-3xl font-bold text-blue-600">{{ count($products) }}</p>
                 <p class="mt-2 text-gray-500">Total de productos.</p>
             </div>
@@ -57,8 +57,12 @@
                             <td class="px-4 py-3 text-center">{{ $product->code_product }}</td>
                             <td class="px-4 py-3 text-center">{{ $product->name_product }}</td>
                             <td class="px-4 py-3 text-center">
-                                {{ $product->quantity_products > 0 ? $product->quantity_products : 'Agotado' }}
+                                <span
+                                    class="{{ $product->quantity_products > 0 ? 'text-black' : 'text-red-600 font-bold' }}">
+                                    {{ $product->quantity_products > 0 ? $product->quantity_products : 'Agotado' }}
+                                </span>
                             </td>
+
                             <td class="px-4 py-3 text-center">
                                 <span
                                     class="inline-block px-3 py-1 text-xs font-semibold rounded-full {{ $product->deleted_at ? 'bg-red-500 text-white' : 'bg-blue-500 text-white' }}">

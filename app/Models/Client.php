@@ -13,7 +13,12 @@ class Client extends Model
     protected $table = 'clients';
 
     protected $fillable = [
-
+        'type_identity',
+        'number_identity',
+        'email_client',
+        'name_client',
+        'phone_client',
+        'address_client'
     ];
 
     public function order()

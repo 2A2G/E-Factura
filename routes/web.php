@@ -31,6 +31,14 @@ Route::prefix('Efactura')->middleware(['auth:sanctum'])->group(function () {
         return view('module.product.product');
     })->name('indexProduct');
 
+    Route::get('shopping', function () {
+        return view('module.billing.create');
+    })->name('indexShopping');
+
+    Route::get('factures', function () {
+        return view('module.billing.view');
+    })->name('indexFacture');
+
 
 
     Route::get('/auth-api', [ApiController::class, 'authenticate']);
