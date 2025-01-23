@@ -32,6 +32,19 @@ class CreateFacture extends Component
     public $searchResults = [];
     public $totalCartAmount = 0;
 
+    public $payment_method = '';
+    public $bank_type = '';
+    public $credit_card_type = '';
+
+    public $banks = [
+        'Bancolombia',
+        'Nequi',
+        'Falabella',
+        'Davivienda',
+        'BBVA',
+        'Banco de Bogotá'
+    ];
+
     public function mount()
     {
         $this->totalAmount = Order::withTrashed()->sum('total_price');
@@ -72,6 +85,11 @@ class CreateFacture extends Component
                 'address_client' => 'nullable|string|max:200',
             ]);
         }
+        // if ($this->currentStep == 2) {
+        //     $this->validate([
+
+        //     ]);
+        // }
 
         $this->currentStep++;
     }
@@ -136,6 +154,15 @@ class CreateFacture extends Component
     private function updateTotal()
     {
         $this->totalCartAmount = array_sum(array_column($this->cart, 'total'));
+    }
+
+    public function store()
+    {
+        $this->validate([
+            'payment_method' => 'required|string',
+            'bank_type' => 'required_if:payment_method,tarjeta|string',
+            'credit_card_type' => 'required_if:payment_method,tarjeta|string',
+        ]);
     }
 
     public function render()

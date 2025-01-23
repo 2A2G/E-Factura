@@ -68,8 +68,10 @@
             <x-slot name="title">
                 @if ($currentStep === 1)
                     <h1 class="text-lg font-medium">Datos del Cliente</h1>
-                @else
+                @elseif ($currentStep === 2)
                     <h1 class="text-lg font-medium">Datos del Producto</h1>
+                @else
+                    <h1 class="text-lg font-medium">Datos de pago</h1>
                 @endif
             </x-slot>
 
@@ -147,7 +149,7 @@
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                @else
+                @elseif($currentStep === 2)
                     <div>
                         <div class="mb-4">
                             <label for="searchProduct" class="block text-gray-600 font-semibold mb-2 text-left">Buscar
@@ -227,7 +229,8 @@
                                         <td class="border border-gray-300 px-4 py-2">{{ $item['code_product'] }}</td>
                                         <td class="border border-gray-300 px-4 py-2">{{ $item['name_product'] }}</td>
                                         <td class="border border-gray-300 px-4 py-2">{{ $item['quantity'] }}</td>
-                                        <td class="border border-gray-300 px-4 py-2">${{ $item['price_product'] }}</td>
+                                        <td class="border border-gray-300 px-4 py-2">${{ $item['price_product'] }}
+                                        </td>
                                         <td class="border border-gray-300 px-4 py-2">${{ $item['total'] }}</td>
                                         <td class="border border-gray-300 px-4 py-2">
                                             <button wire:click="removeFromCart({{ $item['id'] }})"
@@ -242,29 +245,73 @@
                             <span class="font-bold text-lg">Total de la compra: ${{ $totalCartAmount }}</span>
                         </div>
                     </div>
+                @else
+                    <div>
+                        <div class="mb-4">
+                            <label for="payment_method"
+                                class="block text-gray-600 font-semibold mb-2 text-left">Selecciona el Método de
+                                Pago</label>
+                            <select id="payment_method" wire:model.lazy="payment_method"
+                                class="border border-gray-300 rounded px-3 py-2 w-full">
+                                <option value="">Selecciona un método de pago</option>
+                                <option value="10">Efectivo</option>
+                                <option value="tarjeta">Tarjeta</option>
+                                <option value="47">Transferencia</option>
+                            </select>
+                        </div>
 
+                        @if ($payment_method == 'tarjeta')
+                            <div class="mb-4">
+                                <label for="credit_card_type"
+                                    class="block text-gray-600 font-semibold mb-2 text-left">Tipo de Tarjeta</label>
+                                <select id="credit_card_type" wire:model="credit_card_type"
+                                    class="border border-gray-300 rounded px-3 py-2 w-full">
+                                    <option value="">Selecciona el tipo de tarjeta</option>
+                                    <option value="48">Crédito</option>
+                                    <option value="debito">Débito</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="bank_type"
+                                    class="block text-gray-600 font-semibold mb-2 text-left">Selecciona
+                                    el Banco</label>
+                                <select id="bank_type" wire:model="bank_type"
+                                    class="border border-gray-300 rounded px-3 py-2 w-full">
+                                    <option disabledselected value="">Selecciona un banco</option>
+                                    @foreach ($banks as $bank)
+                                        <option value="{{ $bank }}">{{ $bank }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
+
+                    </div>
                 @endif
             </x-slot>
 
             <x-slot name="footer">
-                <div class="flex justify-end">
-                    @if ($currentStep === 1)
-                        <button wire:click="nextStep"
-                            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                            Siguiente
-                        </button>
-                    @else
+                <div class="flex justify-end space-x-2">
+                    @if ($currentStep > 1)
                         <button wire:click="previousStep"
                             class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
                             Atrás
                         </button>
-                        <br>
+                    @endif
+
+                    @if ($currentStep === 1 || $currentStep === 2)
+                        <button wire:click="nextStep"
+                            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                            Siguiente
+                        </button>
+                    @elseif ($currentStep === 3)
                         <button wire:click="store"
                             class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                             Guardar Producto
                         </button>
                     @endif
                 </div>
+
             </x-slot>
         </x-dialog-modal>
 
