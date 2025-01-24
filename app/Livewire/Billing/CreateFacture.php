@@ -200,6 +200,20 @@ class CreateFacture extends Component
                         $newOrder->amount = $cartItem['quantity'];
                         $newOrder->total_price = $cartItem['total'];
 
+                        $product = Product::find($cartItem['id']);
+                        if (!$product) {
+                            throw new \Exception("El producto con ID {$cartItem['id']} no existe.");
+                        }
+
+                        $productRest = $product->quantity_products - $cartItem['quantity'];
+                        if ($productRest < 0) {
+                            throw new \Exception("El producto con ID {$cartItem['id']} no tiene suficiente stock.");
+                        }
+
+                        $product->update([
+                            'quantity_products' => $productRest
+                        ]);
+
                         if (!$newOrder->save()) {
                             throw new \Exception("Error al guardar el pedido.");
                         }
@@ -216,6 +230,7 @@ class CreateFacture extends Component
                     }
 
                     $this->dispatch('post-created', name: "Compra realizada con éxito");
+                    $this->clearInputs();
                 } catch (\Throwable $th) {
                     $this->dispatch('post-error', name: "Hubo un error al crear la compra: " . $th->getMessage());
                     throw $th;
@@ -223,9 +238,12 @@ class CreateFacture extends Component
             });
         } catch (\Throwable $th) {
             $this->dispatch('post-error', name: "Hubo un error en la transacción general: " . $th->getMessage());
+            $this->clearInputs();
             throw $th;
         }
     }
+
+
     public function render()
     {
         return view('livewire.billing.create-facture', [
