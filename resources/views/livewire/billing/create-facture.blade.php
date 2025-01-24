@@ -30,7 +30,7 @@
                         <tr>
                             <th class="px-4 py-2 text-left">Cliente</th>
                             <th class="px-4 py-2 text-left">Fecha</th>
-                            <th class="px-4 py-2 text-right">Total a Pagar</th>
+                            <th class="px-4 py-2 text-right">Valor de la compra</th>
                             <th class="px-4 py-2 text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -39,7 +39,8 @@
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-2">{{ $purchase->client->name_client }}</td>
                                 <td class="px-4 py-2">{{ $purchase->created_at->format('d/m/Y') }}</td>
-                                <td class="px-4 py-2 text-right">${{ number_format($purchase->total, 2) }}</td>
+                                <td class="px-4 py-2 text-right">$</td>
+                                </td>
                                 <td class="px-4 py-2 text-center space-x-2">
                                     <button class="text-blue-600 hover:text-blue-800"
                                         wire:click="viewDetails({{ $purchase->id }})">
@@ -198,6 +199,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                @error('cart')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
                         @endif
 

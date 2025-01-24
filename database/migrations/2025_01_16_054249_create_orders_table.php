@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('bill_id');
             $table->foreignId('product_id');
             $table->integer('amount');
-            $table->integer('total_price');
+            $table->decimal('total_price');
 
             $table->foreign('bill_id')->references('id')->on('bills');
             $table->foreign('product_id')->references('id')->on('products');
