@@ -3,8 +3,11 @@
 namespace App\Livewire\Billing;
 
 use App\Models\Bill;
+use App\Models\Client;
 use App\Models\Order;
+use App\Models\PaymentMethod;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class CreateFacture extends Component
@@ -85,11 +88,12 @@ class CreateFacture extends Component
                 'address_client' => 'nullable|string|max:200',
             ]);
         }
-        // if ($this->currentStep == 2) {
-        //     $this->validate([
-
-        //     ]);
-        // }
+        if ($this->currentStep == 2) {
+            if ($this->cart == null) {
+                $this->dispatch('post-warning', name: 'La cantidad ingresada no es disponible. Debe seleccionar al menos un producto');
+                return;
+            }
+        }
 
         $this->currentStep++;
     }
@@ -114,9 +118,11 @@ class CreateFacture extends Component
     public function addProduct($productId)
     {
         $product = Product::find($productId);
-
-        if ($this->quantities > $product->quantity_products) {
-            session()->flash('error', 'La cantidad ingresada supera la cantidad disponible en el estante.');
+        if ($this->quantities == 0) {
+            $this->dispatch('post-warning', name: 'La cantidad ingresada no es disponible. Debe ser haber al menos un producto');
+            return;
+        } elseif ($this->quantities > $product->quantity_products) {
+            $this->dispatch('post-warning', name: 'La cantidad ingresada supera la cantidad disponible en el estante.');
             return;
         }
 
@@ -158,12 +164,85 @@ class CreateFacture extends Component
 
     public function store()
     {
-        $this->validate([
-            'payment_method' => 'required|string',
-            'bank_type' => 'required_if:payment_method,tarjeta|string',
-            'credit_card_type' => 'required_if:payment_method,tarjeta|string',
-        ]);
+        try {
+            $this->validate([
+                'payment_method' => 'required|string',
+                'bank_type' => 'required_if:payment_method,tarjeta|string',
+                'credit_card_type' => 'required_if:payment_method,tarjeta|string',
+            ]);
+
+            DB::transaction(function () {
+                try {
+                    // Crear y guardar el cliente
+                    $newClient = new Client();
+                    $newClient->type_identity = $this->type_identity;
+                    $newClient->number_identity = $this->number_identity;
+                    $newClient->email_client = $this->email_client;
+                    $newClient->name_client = $this->name_client;
+                    $newClient->phone_client = $this->phone_client;
+                    $newClient->address_client = $this->address_client;
+
+                    if (!$newClient->save()) {
+                        throw new \Exception("Error al guardar el cliente.");
+                    }
+
+                    $newBill = new Bill();
+                    $newBill->client_id = $newClient->id;
+
+                    if (!$newBill->save()) {
+                        throw new \Exception("Error al guardar la factura.");
+                    }
+
+                    foreach ($this->cart as $cartItem) {
+                        $newOrder = new Order();
+                        $newOrder->bill_id = $newBill->id;
+                        $newOrder->product_id = $cartItem['id'];
+                        $newOrder->amount = $cartItem['quantity'];
+                        $newOrder->total_price = $cartItem['total'];
+
+                        $product = Product::find($cartItem['id']);
+                        if (!$product) {
+                            throw new \Exception("El producto con ID {$cartItem['id']} no existe.");
+                        }
+
+                        $productRest = $product->quantity_products - $cartItem['quantity'];
+                        if ($productRest < 0) {
+                            throw new \Exception("El producto con ID {$cartItem['id']} no tiene suficiente stock.");
+                        }
+
+                        $product->update([
+                            'quantity_products' => $productRest
+                        ]);
+
+                        if (!$newOrder->save()) {
+                            throw new \Exception("Error al guardar el pedido.");
+                        }
+                    }
+
+                    $newPaymentMethod = new PaymentMethod();
+                    $newPaymentMethod->bill_id = $newBill->id;
+                    $newPaymentMethod->payment_method = $this->payment_method;
+                    $newPaymentMethod->bank_type = $this->bank_type;
+                    $newPaymentMethod->credit_card_type = $this->credit_card_type;
+
+                    if (!$newPaymentMethod->save()) {
+                        throw new \Exception("Error al guardar el método de pago.");
+                    }
+
+                    $this->dispatch('post-created', name: "Compra realizada con éxito");
+                    $this->clearInputs();
+                } catch (\Throwable $th) {
+                    $this->dispatch('post-error', name: "Hubo un error al crear la compra: " . $th->getMessage());
+                    throw $th;
+                }
+            });
+        } catch (\Throwable $th) {
+            $this->dispatch('post-error', name: "Hubo un error en la transacción general: " . $th->getMessage());
+            $this->clearInputs();
+            throw $th;
+        }
     }
+
 
     public function render()
     {

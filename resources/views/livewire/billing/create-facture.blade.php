@@ -8,11 +8,11 @@
                 </div>
                 <div class="bg-white shadow rounded-lg p-4">
                     <h2 class="text-gray-600 text-lg font-medium">Monto Total</h2>
-                    <p class="text-2xl font-bold text-green-600">${{ number_format($totalAmount, 2) }}</p>
+                    <p class="text-2xl font-bold text-green-600">${{ number_format($totalAmount, 3) }}</p>
                 </div>
                 <div class="bg-white shadow rounded-lg p-4">
                     <h2 class="text-gray-600 text-lg font-medium">Promedio por Compra</h2>
-                    <p class="text-2xl font-bold text-purple-600">${{ number_format($averagePurchase, 2) }}</p>
+                    <p class="text-2xl font-bold text-purple-600">${{ number_format($averagePurchase, 3) }}</p>
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                         <tr>
                             <th class="px-4 py-2 text-left">Cliente</th>
                             <th class="px-4 py-2 text-left">Fecha</th>
-                            <th class="px-4 py-2 text-right">Total a Pagar</th>
+                            <th class="px-4 py-2 text-right">Valor de la compra</th>
                             <th class="px-4 py-2 text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -39,20 +39,24 @@
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-2">{{ $purchase->client->name_client }}</td>
                                 <td class="px-4 py-2">{{ $purchase->created_at->format('d/m/Y') }}</td>
-                                <td class="px-4 py-2 text-right">${{ number_format($purchase->total, 2) }}</td>
+                                <td class="px-4 py-2 text-right">$</td>
+                                </td>
                                 <td class="px-4 py-2 text-center space-x-2">
                                     <button class="text-blue-600 hover:text-blue-800"
-                                        wire:click="viewDetails({{ $purchase->id }})">
+                                        wire:click="viewDetails({{ $purchase->id }})"
+                                        title="Ver más detalles de la compra">
                                         Ver Detalles
                                     </button>
                                     <button class="text-green-600 hover:text-green-800"
-                                        wire:click="viewInvoice({{ $purchase->id }})">
+                                        wire:click="viewInvoice({{ $purchase->id }})"
+                                        title="Ver la factura electrónica">
                                         Ver Factura
                                     </button>
-                                    <button class="text-red-600 hover:text-red-800"
+
+                                    {{-- <button class="text-red-600 hover:text-red-800"
                                         wire:click="deletePurchase({{ $purchase->id }})">
                                         Eliminar
-                                    </button>
+                                    </button> --}}
                                 </td>
                             </tr>
                         @endforeach
@@ -180,7 +184,9 @@
                                             <tr>
                                                 <td class="px-4 py-2">{{ $result['code_product'] }}</td>
                                                 <td class="px-4 py-2">{{ $result['name_product'] }}</td>
-                                                <td class="px-4 py-2">{{ $result['price_product'] }}</td>
+                                                <td class="px-4 py-2">
+                                                    ${{ number_format($result['price_product'], 3) }}</td>
+
                                                 <td class="px-4 py-2">
                                                     <input type="number" min="1"
                                                         max="{{ $result['quantity_products'] }}"
@@ -198,6 +204,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                @error('cart')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
                         @endif
 
