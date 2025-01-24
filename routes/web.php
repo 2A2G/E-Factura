@@ -41,6 +41,10 @@ Route::prefix('Efactura')->middleware(['auth:sanctum'])->group(function () {
 
 
 
+    Route::get('facture-local', function () {
+        return view('module.facture.facture');
+    })->name('generateFactur');
+
     Route::get('/auth-api', [ApiController::class, 'authenticate']);
 });
 
