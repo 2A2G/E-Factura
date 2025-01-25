@@ -186,8 +186,10 @@ class CreateFacture extends Component
                         throw new \Exception("Error al guardar el cliente.");
                     }
 
+                    $base = "EFactur_";
                     $newBill = new Bill();
                     $newBill->client_id = $newClient->id;
+                    $newBill->reference_code = $base . $newClient->id;
 
                     if (!$newBill->save()) {
                         throw new \Exception("Error al guardar la factura.");

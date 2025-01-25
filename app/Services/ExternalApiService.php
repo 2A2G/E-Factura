@@ -69,7 +69,6 @@ class ExternalApiService
             throw new \Exception('Factura no encontrada');
         }
 
-        // Construcción de los datos
         return [
             "numbering_range_id" => $bill->numbering_range_id,
             "reference_code" => $bill->reference_code ?? "",
@@ -85,7 +84,7 @@ class ExternalApiService
             ],
             "customer" => [
                 "identification" => $bill->client->number_identity ?? "",
-                "dv" => $bill->client->type_identity ?? "",
+                "dv" => "3",
                 "company" => $bill->customer_company ?? "",
                 "trade_name" => $bill->customer_trade_name ?? "",
                 "names" => $bill->client->name_client ?? "",
@@ -114,6 +113,7 @@ class ExternalApiService
             })->toArray(),
         ];
     }
+
     public function sendFacture(array $data)
     {
         $token = $this->getToken();
@@ -151,7 +151,6 @@ class ExternalApiService
 
         throw new \Exception('Error al enviar la factura: ' . $response->body());
     }
-
     public function searchFacture($number): mixed
     {
         try {
@@ -177,9 +176,5 @@ class ExternalApiService
             ], 500);
         }
     }
-
-
-
-
 
 }

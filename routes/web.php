@@ -42,7 +42,7 @@ Route::prefix('Efactura')->middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/generate/{id}', [FactureController::class, 'generatePDF'])->name('viewFacture');
 
-    
+
     //Consumiendo las API'S
 
     Route::get('/auth-api', [ApiController::class, 'authenticate']);
