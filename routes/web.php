@@ -40,14 +40,17 @@ Route::prefix('Efactura')->middleware(['auth:sanctum'])->group(function () {
         return view('module.billing.view');
     })->name('indexFacture');
 
+    Route::get('/generate/{id}', [FactureController::class, 'generatePDF'])->name('viewFacture');
 
-    Route::get('/generate{id}', [FactureController::class, 'generatePDF'])->name('viewFacture');
-
-    Route::get('facture-local', function () {
-        return view('module.facture.facture');
-    })->name('generateFacture');
+    
+    //Consumiendo las API'S
 
     Route::get('/auth-api', [ApiController::class, 'authenticate']);
+    Route::get('/sendFacture/{facture_id}', [ApiController::class, 'sendFacture'])->name('sendFacture');
+    Route::get('/getFacture', [ApiController::class, 'getFacture'])->name('getFacture');
+    Route::get('/searchFacture/{numerReference}', [ApiController::class, 'searchFacture'])->name('searchFacture');
+
+
 });
 
 
