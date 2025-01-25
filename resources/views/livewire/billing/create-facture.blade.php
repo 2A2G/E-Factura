@@ -47,11 +47,10 @@
                                         class="text-blue-600 hover:text-blue-800" title="Ver más detalles de la compra">
                                         Ver Detalles
                                     </a>
-                                    <button class="text-green-600 hover:text-green-800"
-                                        wire:click="viewInvoice({{ $purchase->id }})"
-                                        title="Ver la factura electrónica">
+                                    <a href="{{ route('sendFacture', $purchase->id) }}"
+                                        class="text-green-600 hover:text-green-800" title="Ver la factura electrónica">
                                         Ver Factura
-                                    </button>
+                                    </a>
 
                                     {{-- <button class="text-red-600 hover:text-red-800"
                                         wire:click="deletePurchase({{ $purchase->id }})">

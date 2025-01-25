@@ -6,28 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Factura</title>
     <style>
+        html,
         body {
+            height: 100%;
             margin: 0;
-            padding: 40px;
+            padding: 0;
             font-family: 'Arial', sans-serif;
             color: #333;
             background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
 
         .container {
-            width: 100%;
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
+            background-color: #ffffff;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             padding: 40px;
             border-radius: 12px;
-            text-align: center;
+            overflow: hidden;
         }
 
         .header {
-            font-size: 32px;
+            text-align: center;
+            font-size: 36px;
             font-weight: 700;
-            color: #007BFF;
+            color: #2c3e50;
             margin-bottom: 20px;
         }
 
@@ -41,7 +48,6 @@
             justify-content: space-between;
             gap: 20px;
             margin-bottom: 30px;
-            text-align: left;
         }
 
         .invoice-info,
@@ -49,6 +55,13 @@
             font-size: 16px;
             color: #7b7b7b;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .client-info {
+            text-align: right;
         }
 
         .products-table {
@@ -66,7 +79,7 @@
 
         .products-table th {
             background-color: #f1f5f9;
-            color: #007BFF;
+            color: #2c3e50;
             font-weight: 600;
         }
 
@@ -76,15 +89,16 @@
 
         .summary {
             display: flex;
-            justify-content: flex-end;
             font-size: 20px;
             font-weight: 600;
             color: #333;
+            text-align: right;
+            margin: 7px
         }
 
         .summary .label {
             font-weight: bold;
-            color: #007BFF;
+            color: #2c3e50;
         }
 
         .footer {
