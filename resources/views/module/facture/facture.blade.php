@@ -4,65 +4,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Factura</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Factura</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            background-color: #ffffff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .header {
+            font-size: 32px;
+            font-weight: 700;
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+
+        .separator {
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 30px;
+        }
+
+        .info-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .invoice-info,
+        .client-info {
+            font-size: 16px;
+            color: #7b7b7b;
+            flex: 1;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        .products-table th,
+        .products-table td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+        }
+
+        .products-table th {
+            background-color: #f1f5f9;
+            color: #007BFF;
+            font-weight: 600;
+        }
+
+        .products-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        .summary {
+            display: flex;
+            justify-content: flex-end;
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .summary .label {
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 14px;
+            color: #7b7b7b;
+        }
+
+        .footer-message {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 py-10">
-    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-8">
-        <!-- Header -->
-        <div class="text-center border-b pb-4 mb-6">
-            <h1 class="text-2xl font-bold text-gray-700">E-Factura</h1>
-            <p class="text-gray-500">Fecha: <?php echo date('d/m/Y'); ?></p>
+<body>
+    <div class="container">
+        <div class="header">
+            E-FACTURA
         </div>
 
-        <!-- Datos del Cliente -->
-        <div class="mb-8">
-            <h2 class="text-lg font-semibold text-gray-700 mb-4">Datos del Cliente</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <p class="text-gray-600"><span class="font-medium">Tipo de Identidad:</span>das</p>
-                    <p class="text-gray-600"><span class="font-medium">Número de Identidad:</span>33</p>
-                    <p class="text-gray-600"><span class="font-medium">Nombre:</span> asdasd</p>
-                </div>
-                <div>
-                    <p class="text-gray-600"><span class="font-medium">Correo Electrónico:</span> asdads</p>
-                    <p class="text-gray-600"><span class="font-medium">Teléfono:</span> asds</p>
-                </div>
+        <div class="separator"></div>
+
+        <div class="info-top">
+            <div class="invoice-info">
+                <p>Fecha: {{ $bill->created_at->format('d/m/Y') }}</p>
+                <p>Número de Factura: {{ $bill->id }}</p>
+            </div>
+
+            <div class="client-info">
+                <p><strong>Cliente:</strong> {{ $client->name_client }}</p>
+                <p><strong>Número de Identidad:</strong> {{ $client->number_identity }}</p>
+                <p><strong>Teléfono:</strong> {{ $client->phone_client }}</p>
             </div>
         </div>
 
-        <!-- Productos -->
-        <div class="mb-8">
-            <h2 class="text-lg font-semibold text-gray-700 mb-4">Productos</h2>
-            <table class="w-full border-collapse border border-gray-300">
-                <thead class="bg-gray-100">
+        <table class="products-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre del Producto</th>
+                    <th>Cantidad</th>
+                    <th>Valor Unitario</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($orders as $order)
                     <tr>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-600">Código</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-600">Nombre</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-600">Precio</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-600">Cantidad</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-600">Subtotal</th>
+                        <td>{{ $order->product->code_product }}</td>
+                        <td>{{ $order->product->name_product }}</td>
+                        <td>{{ $order->amount }}</td>
+                        <td>{{ $order->product->price_product }}</td>
+                        <td>${{ number_format($order->total_price, 3) }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    <!-- Ejemplo de fila, aquí se insertan los datos dinámicamente -->
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">12345</td>
-                        <td class="border border-gray-300 px-4 py-2">Producto A</td>
-                        <td class="border border-gray-300 px-4 py-2">$20.00</td>
-                        <td class="border border-gray-300 px-4 py-2">2</td>
-                        <td class="border border-gray-300 px-4 py-2">$40.00</td>
-                    </tr>
-                    <!-- Repetir filas según sea necesario -->
-                </tbody>
-            </table>
+                @endforeach
+            </tbody>
+        </table>
+
+        <div class="summary">
+            <p><span class="label">Total:</span> ${{ number_format($totalValue, 3) }}</p>
         </div>
 
-        <!-- Resumen -->
-        <div class="text-right">
-            <p class="text-gray-700 text-lg"><span class="font-medium">Precio Total:</span> $100.00</p>
-            <p class="text-gray-700 text-lg"><span class="font-medium">Valor a Pagar:</span> $100.00</p>
+        <div class="footer-message">
+            Todos los cheques se extenderán a nombre de E-Factura Col
+        </div>
+
+        <div class="footer-message">
+            Gracias por tu confianza
+        </div>
+
+        <div class="footer">
+            <p>Gracias por su compra. ¡Nos alegra servirle!</p>
         </div>
     </div>
 </body>

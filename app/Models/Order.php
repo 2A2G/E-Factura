@@ -20,15 +20,15 @@ class Order extends Model
 
     public function product()
     {
-        $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class);
     }
     public function client()
     {
-        $this->belongsTo(Client::class);
+        return $this->belongsTo(Client::class);
     }
     public function bill()
     {
-        $this->belongsTo(Bill::class);
+        return $this->belongsTo(Bill::class);
     }
 
 }

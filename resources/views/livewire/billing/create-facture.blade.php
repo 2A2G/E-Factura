@@ -24,9 +24,9 @@
                 </button>
             </div>
 
-            <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-                <table class="min-w-full table-auto border-collapse">
-                    <thead class="bg-gray-100 text-gray-700">
+            <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 mt-6">
+                <table class="min-w-full text-sm text-left text-gray-500 border-collapse">
+                    <thead class="bg-gray-200">
                         <tr>
                             <th class="px-4 py-2 text-left">Cliente</th>
                             <th class="px-4 py-2 text-left">Fecha</th>
@@ -39,14 +39,14 @@
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-2">{{ $purchase->client->name_client }}</td>
                                 <td class="px-4 py-2">{{ $purchase->created_at->format('d/m/Y') }}</td>
-                                <td class="px-4 py-2 text-right">$</td>
+                                <td class="px-4 py-2 text-right">
+                                    ${{ number_format($purchase->orders->sum('total_price'), 3) }}</td>
                                 </td>
                                 <td class="px-4 py-2 text-center space-x-2">
-                                    <button class="text-blue-600 hover:text-blue-800"
-                                        wire:click="viewDetails({{ $purchase->id }})"
-                                        title="Ver más detalles de la compra">
+                                    <a href="{{ route('viewFacture', $purchase->id) }}"
+                                        class="text-blue-600 hover:text-blue-800" title="Ver más detalles de la compra">
                                         Ver Detalles
-                                    </button>
+                                    </a>
                                     <button class="text-green-600 hover:text-green-800"
                                         wire:click="viewInvoice({{ $purchase->id }})"
                                         title="Ver la factura electrónica">
