@@ -24,9 +24,9 @@
                 </button>
             </div>
 
-            <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-                <table class="min-w-full table-auto border-collapse">
-                    <thead class="bg-gray-100 text-gray-700">
+            <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 mt-6">
+                <table class="min-w-full text-sm text-left text-gray-500 border-collapse">
+                    <thead class="bg-gray-200">
                         <tr>
                             <th class="px-4 py-2 text-left">Cliente</th>
                             <th class="px-4 py-2 text-left">Fecha</th>
