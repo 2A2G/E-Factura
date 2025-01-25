@@ -247,7 +247,7 @@ class CreateFacture extends Component
     public function render()
     {
         return view('livewire.billing.create-facture', [
-            'purchases' => Bill::withTrashed()->paginate(10),
+            'purchases' => Bill::with('orders')->withTrashed()->paginate(10),
         ]);
     }
 }

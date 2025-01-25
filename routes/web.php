@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\FactureController;
 use App\Livewire\Client\ClientController as ClientClientController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,10 +41,11 @@ Route::prefix('Efactura')->middleware(['auth:sanctum'])->group(function () {
     })->name('indexFacture');
 
 
+    Route::get('/generate{id}', [FactureController::class, 'generatePDF'])->name('viewFacture');
 
     Route::get('facture-local', function () {
         return view('module.facture.facture');
-    })->name('generateFactur');
+    })->name('generateFacture');
 
     Route::get('/auth-api', [ApiController::class, 'authenticate']);
 });
