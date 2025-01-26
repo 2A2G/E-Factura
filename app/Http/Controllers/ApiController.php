@@ -85,4 +85,19 @@ class ApiController extends Controller
 
     }
 
+    public function viewFacture($numerReference)
+    {
+        try {
+            $response = $this->apiService->searchFacture($numerReference);
+            $qrUrl = $response['data']['bill']['qr'];
+            return redirect($qrUrl);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al enviar la factura',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }
