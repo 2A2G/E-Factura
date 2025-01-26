@@ -29,25 +29,6 @@ class ApiController extends Controller
         }
     }
 
-    public function sendFacture($facture_id)
-    {
-        try {
-            $data = $this->apiService->constructFacture($facture_id);
-
-            $response = $this->apiService->sendFacture($data);
-
-            return response()->json([
-                'message' => 'Factura enviada con éxito',
-                'response' => $response,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error al enviar la factura',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
 
     public function getFacture()
     {
@@ -65,7 +46,6 @@ class ApiController extends Controller
             ], 500);
         }
     }
-
 
     public function searchFacture($numerReference)
     {
@@ -99,5 +79,7 @@ class ApiController extends Controller
             ], 500);
         }
     }
+
+
 
 }

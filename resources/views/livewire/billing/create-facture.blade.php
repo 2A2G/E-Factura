@@ -30,6 +30,7 @@
                         <tr>
                             <th class="px-4 py-2 text-left">Codigo de referencia</th>
                             <th class="px-4 py-2 text-left">Cliente</th>
+                            <th class="px-4 py-2 text-left">Código CUFE</th>
                             <th class="px-4 py-2 text-left">Fecha</th>
                             <th class="px-4 py-2 text-right">Valor de la compra</th>
                             <th class="px-4 py-2 text-center">Acciones</th>
@@ -40,6 +41,13 @@
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-2">{{ $purchase->reference_code }}</td>
                                 <td class="px-4 py-2">{{ $purchase->client->name_client }}</td>
+                                <td class="px-4 py-2">
+                                    @if ($purchase->cufe)
+                                        <span class="text-blue-600">Recibido</span>
+                                    @else
+                                        <span class="text-red-600">No recibido</span>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-2">{{ $purchase->created_at->format('d/m/Y') }}</td>
                                 <td class="px-4 py-2 text-right">
                                     ${{ number_format($purchase->orders->sum('total_price'), 3) }}</td>
@@ -49,10 +57,13 @@
                                         class="text-blue-600 hover:text-blue-800" title="Ver más detalles de la compra">
                                         Ver Detalles
                                     </a>
-                                    <a href="{{ route('sendFacture', $purchase->id) }}"
-                                        class="text-green-600 hover:text-green-800" title="Ver la factura electrónica">
-                                        Ver Factura
-                                    </a>
+                                    @if ($purchase->cufe)
+                                        <a href="{{ env('url_dian') . $purchase->cufe }}" target="_blank"
+                                            class="text-green-600 hover:text-green-800"
+                                            title="Ver la factura electrónica">
+                                            Ver Factura
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

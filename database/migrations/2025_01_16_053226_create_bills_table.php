@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('client_id');
             $table->string('reference_code')->unique();
+            $table->text('cufe')->unique()->nullable();
 
             $table->foreign('client_id')->references('id')->on('clients');
 
