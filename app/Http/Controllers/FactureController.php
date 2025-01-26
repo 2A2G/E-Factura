@@ -23,7 +23,7 @@ class FactureController extends Controller
             return response()->json(['error' => 'Factura no encontrada para el cliente'], 404);
         }
 
-        $orders = Order::with('product')->where('bill_id', $bill->id)->get();
+        $orders = Order::withTrashed()->with('product')->where('bill_id', $bill->id)->get();
         $totalValue = $orders->sum('total_price');
         $pdf = Pdf::loadView('module.facture.facture', compact('client', 'bill', 'orders', 'totalValue'));
 

@@ -46,13 +46,13 @@
                                 </td>
                                 <td class="px-4 py-3 text-center space-x-2">
                                     @if ($facture['status'] == 0)
-                                        <a href="{{ route('searchFacture', $facture['number']) }}"
+                                        <a href="{{ route('facture', $facture['number']) }}"
                                             class="text-blue-600 hover:text-blue-800 cursor-not-allowed opacity-50"
                                             title="Factura no enviada, no se puede ver">
                                             Ver Factura
                                         </a>
                                     @else
-                                        <a href="{{ route('searchFacture', $facture['number']) }}"
+                                        <a href="{{ route('facture', $facture['number']) }}"
                                             class="text-blue-600 hover:text-blue-800"
                                             title="Ver más detalles de la factura">
                                             Ver Factura

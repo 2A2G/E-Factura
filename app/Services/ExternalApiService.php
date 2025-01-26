@@ -61,6 +61,14 @@ class ExternalApiService
         return Cache::get('external_api_token');
     }
 
+    public function isAutenticate()
+    {
+        if (!Cache::get('external_api_token')) {
+            $this->authenticate();
+        }
+
+    }
+
     public function constructFacture($facture_id)
     {
         $bill = Bill::find($facture_id);
