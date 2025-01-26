@@ -28,6 +28,7 @@
                 <table class="min-w-full text-sm text-left text-gray-500 border-collapse">
                     <thead class="bg-gray-200">
                         <tr>
+                            <th class="px-4 py-2 text-left">Codigo de referencia</th>
                             <th class="px-4 py-2 text-left">Cliente</th>
                             <th class="px-4 py-2 text-left">Fecha</th>
                             <th class="px-4 py-2 text-right">Valor de la compra</th>
@@ -37,6 +38,7 @@
                     <tbody class="text-gray-700">
                         @foreach ($purchases as $purchase)
                             <tr class="border-b hover:bg-gray-50">
+                                <td class="px-4 py-2">{{ $purchase->reference_code }}</td>
                                 <td class="px-4 py-2">{{ $purchase->client->name_client }}</td>
                                 <td class="px-4 py-2">{{ $purchase->created_at->format('d/m/Y') }}</td>
                                 <td class="px-4 py-2 text-right">
@@ -51,11 +53,6 @@
                                         class="text-green-600 hover:text-green-800" title="Ver la factura electrónica">
                                         Ver Factura
                                     </a>
-
-                                    {{-- <button class="text-red-600 hover:text-red-800"
-                                        wire:click="deletePurchase({{ $purchase->id }})">
-                                        Eliminar
-                                    </button> --}}
                                 </td>
                             </tr>
                         @endforeach

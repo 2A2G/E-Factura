@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Order;
 use App\Models\PaymentMethod;
 use App\Models\Product;
+use App\Services\ExternalApiService;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -50,6 +51,8 @@ class CreateFacture extends Component
 
     public function mount()
     {
+        $apiService = new ExternalApiService();
+        $apiService->isAutenticate();
         $this->totalAmount = Order::withTrashed()->sum('total_price');
         $totalOrders = Order::withTrashed()->count();
         $this->averagePurchase = $totalOrders > 0 ? $this->totalAmount / $totalOrders : 0;
