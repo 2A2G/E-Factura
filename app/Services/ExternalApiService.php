@@ -111,7 +111,7 @@ class ExternalApiService
                     "quantity" => $item->amount,
                     "discount_rate" => $item->discount_rate ?? 0,
                     "price" => $item->total_price,
-                    "tax_rate" => $item->tax_rate,
+                    "tax_rate" => "19.00",
                     "unit_measure_id" => "70",
                     "standard_code_id" => "1",
                     "is_excluded" => "0",
@@ -135,9 +135,9 @@ class ExternalApiService
             ->post(env('url_api') . '/v1/bills/validate', $data);
 
         if ($response->successful()) {
-            dd($response->json());
-            return $response->json();
+            return $response['data']['bill']['cufe'];
         }
+
 
         throw new \Exception('Error al enviar la factura: ' . $response->body());
     }

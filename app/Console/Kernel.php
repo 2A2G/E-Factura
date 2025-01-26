@@ -25,8 +25,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            Log::info('Ejecutando tarea programada SendFactureDian');
+            Log::info('Despachando job SendFactureDian');
             dispatch(new SendFactureDian(app(ExternalApiService::class)));
+
+            Log::info('Job SendFactureDian despachado');
         })->everyTwoMinutes();
 
     }

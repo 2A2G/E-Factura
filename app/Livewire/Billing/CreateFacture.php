@@ -248,11 +248,6 @@ class CreateFacture extends Component
         }
     }
 
-    public function viewFatureDian($cufe)
-    {
-        $urlDian = env('url_dian');
-        return redirect($urlDian . $cufe);
-    }
 
 
     public function render()

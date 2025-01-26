@@ -41,7 +41,13 @@
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-2">{{ $purchase->reference_code }}</td>
                                 <td class="px-4 py-2">{{ $purchase->client->name_client }}</td>
-                                <td class="px-4 py-2">{{ $purchase->cufe }}</td>
+                                <td class="px-4 py-2">
+                                    @if ($purchase->cufe)
+                                        <span class="text-blue-600">Recibido</span>
+                                    @else
+                                        <span class="text-red-600">No recibido</span>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-2">{{ $purchase->created_at->format('d/m/Y') }}</td>
                                 <td class="px-4 py-2 text-right">
                                     ${{ number_format($purchase->orders->sum('total_price'), 3) }}</td>
@@ -52,11 +58,11 @@
                                         Ver Detalles
                                     </a>
                                     @if ($purchase->cufe)
-                                        <button wire:click="viewFatureDian({{ $purchase->id }})"
+                                        <a href="{{ env('url_dian') . $purchase->cufe }}" target="_blank"
                                             class="text-green-600 hover:text-green-800"
                                             title="Ver la factura electrónica">
                                             Ver Factura
-                                        </button>
+                                        </a>
                                     @endif
                                 </td>
                             </tr>
