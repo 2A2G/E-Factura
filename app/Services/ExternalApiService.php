@@ -63,6 +63,7 @@ class ExternalApiService
 
     public function isAutenticate()
     {
+        // dd(Cache::get('external_api_token'));
         if (!Cache::get('external_api_token')) {
             $this->authenticate();
         }
@@ -159,6 +160,7 @@ class ExternalApiService
 
         throw new \Exception('Error al enviar la factura: ' . $response->body());
     }
+
     public function searchFacture($number): mixed
     {
         try {

@@ -46,7 +46,7 @@ Route::prefix('Efactura')->middleware(['auth:sanctum'])->group(function () {
     //Consumiendo las API'S
 
     Route::get('/auth-api', [ApiController::class, 'authenticate']);
-    Route::get('/sendFacture/{facture_id}', [ApiController::class, 'sendFacture'])->name('sendFacture');
+    // Route::get('/sendFacture/{facture_id}', [ApiController::class, 'sendFacture'])->name('sendFacture');
     Route::get('/getFacture', [ApiController::class, 'getFacture'])->name('getFacture');
     Route::get('/searchFactures/{numerReference}', [ApiController::class, 'searchFacture'])->name('searchFacture');
     Route::get('/searchFacture/{numerReference}', [ApiController::class, 'viewFacture'])->name('facture');

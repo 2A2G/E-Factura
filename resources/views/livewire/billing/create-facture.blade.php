@@ -30,6 +30,7 @@
                         <tr>
                             <th class="px-4 py-2 text-left">Codigo de referencia</th>
                             <th class="px-4 py-2 text-left">Cliente</th>
+                            <th class="px-4 py-2 text-left">Código CUFE</th>
                             <th class="px-4 py-2 text-left">Fecha</th>
                             <th class="px-4 py-2 text-right">Valor de la compra</th>
                             <th class="px-4 py-2 text-center">Acciones</th>
@@ -40,6 +41,7 @@
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-2">{{ $purchase->reference_code }}</td>
                                 <td class="px-4 py-2">{{ $purchase->client->name_client }}</td>
+                                <td class="px-4 py-2">{{ $purchase->cufe }}</td>
                                 <td class="px-4 py-2">{{ $purchase->created_at->format('d/m/Y') }}</td>
                                 <td class="px-4 py-2 text-right">
                                     ${{ number_format($purchase->orders->sum('total_price'), 3) }}</td>
