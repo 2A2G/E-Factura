@@ -48,7 +48,6 @@ class ApiController extends Controller
         }
     }
 
-
     public function getFacture()
     {
         try {
@@ -65,7 +64,6 @@ class ApiController extends Controller
             ], 500);
         }
     }
-
 
     public function searchFacture($numerReference)
     {
@@ -99,5 +97,7 @@ class ApiController extends Controller
             ], 500);
         }
     }
+
+    
 
 }

@@ -49,10 +49,13 @@
                                         class="text-blue-600 hover:text-blue-800" title="Ver más detalles de la compra">
                                         Ver Detalles
                                     </a>
-                                    <a href="{{ route('sendFacture', $purchase->id) }}"
-                                        class="text-green-600 hover:text-green-800" title="Ver la factura electrónica">
-                                        Ver Factura
-                                    </a>
+                                    @if ($purchase->cufe)
+                                        <button wire:click="viewFatureDian({{ $purchase->id }})"
+                                            class="text-green-600 hover:text-green-800"
+                                            title="Ver la factura electrónica">
+                                            Ver Factura
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

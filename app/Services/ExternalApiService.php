@@ -69,16 +69,15 @@ class ExternalApiService
 
     }
 
-    public function constructFacture($facture_id)
+    public function constructFacture($reference_code)
     {
-        $bill = Bill::find($facture_id);
-
+        $bill = Bill::where('reference_code', $reference_code)->first();
         if (!$bill) {
             throw new \Exception('Factura no encontrada');
         }
 
         return [
-            "numbering_range_id" => $bill->numbering_range_id,
+            "numbering_range_id" => "",
             "reference_code" => $bill->reference_code ?? "",
             "observation" => $bill->observation ?? "",
             "payment_form" => $bill->payment_form ?? "1",
@@ -135,6 +134,7 @@ class ExternalApiService
             ->post(env('url_api') . '/v1/bills/validate', $data);
 
         if ($response->successful()) {
+            dd($response->json());
             return $response->json();
         }
 

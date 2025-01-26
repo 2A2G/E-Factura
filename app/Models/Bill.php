@@ -11,7 +11,9 @@ class Bill extends Model
     use HasFactory;
     use SoftDeletes;
     protected $fillable = [
-        'client_id'
+        'client_id',
+        'reference_code',
+        'cufe'
     ];
 
     public function orders()
