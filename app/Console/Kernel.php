@@ -1,11 +1,8 @@
 <?php
 namespace App\Console;
 
-use App\Jobs\SendFactureDian;
 use Illuminate\Console\Scheduling\Schedule;
-use App\Services\ExternalApiService;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -24,13 +21,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            Log::info('Despachando job SendFactureDian');
-            dispatch(new SendFactureDian(app(ExternalApiService::class)));
-
-            Log::info('Job SendFactureDian despachado');
-        })->everyTwoMinutes();
-
+        $schedule->job(new \App\Jobs\SendFactureDian(app(\App\Services\ExternalApiService::class)))
+            ->onQueue('default')
+            ->withoutOverlapping()
+            ->timeout(180);
     }
 
 
@@ -42,7 +36,6 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__ . '/Commands');
-
         require base_path('routes/console.php');
     }
 }

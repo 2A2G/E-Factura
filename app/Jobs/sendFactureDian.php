@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Jobs;
 
 use App\Services\ExternalApiService;
@@ -16,52 +17,65 @@ class SendFactureDian implements ShouldQueue
 
     protected $apiService;
 
-    public $tries = 5;
+    public $tries = 3;
+    public $backoff = 30;
+    public $timeout = 180;
+    // public $queue = 'default';
 
+    /**
+     * Inyectamos el servicio de API.
+     *
+     * @param ExternalApiService $apiService
+     */
     public function __construct(ExternalApiService $apiService)
     {
         $this->apiService = $apiService;
     }
 
-    public function handle()
+    /**
+     * Indica hasta cuándo intentar reintentar el trabajo.
+     *
+     * @return \DateTime
+     */
+    public function retryUntil()
     {
-        // Log::info('Iniciando trabajo SendFactureDian');
-
-        $billsWithoutCufe = Bill::whereNull('cufe')->get();
-        // Log::info('Facturas sin CUFE encontradas: ' . $billsWithoutCufe->count());
-
-        foreach ($billsWithoutCufe as $bill) {
-            Log::info('Procesando Bill ID: ' . $bill->id);
-            try {
-                // Log::info('Construyendo Factura');
-
-                $data = $this->apiService->constructFacture($bill->reference_code);
-                Log::info('Enviando factura'. $data);
-
-                $response = $this->apiService->sendFacture($data);
-                // Log::info('Respuesta de la DIAN', ['response' => $response]);
-
-                if (!$response) {
-                    Log::error('Error al recibir la respuesta de la DIAN', ['response' => $response]);
-                    continue;
-                }
-
-                $cufe = $response;
-                if (!$cufe) {
-                    Log::error('CUFE no encontrado en la respuesta de la DIAN para Bill ID: ' . $bill->id);
-                    continue;
-                }
-
-                $bill->update(['cufe' => $cufe]);
-                Log::info('CUFE actualizado para Bill ID: ' . $bill->id);
-
-            } catch (\Exception $e) {
-                Log::error('Excepción al procesar Bill ID: ' . $bill->id, [
-                    'error' => $e->getMessage(),
-                    'stack' => $e->getTraceAsString(),
-                ]);
-            }
-        }
+        return now()->addMinutes(10);
     }
 
+    /**
+     * Procesa el trabajo.
+     */
+    public function handle()
+    {
+        // Obtener todas las facturas pendientes de CUFE
+        $billsWithoutCufe = Bill::whereNull('cufe')->get();
+
+        Log::info("Iniciando el procesamiento de {$billsWithoutCufe->count()} facturas sin CUFE");
+
+        foreach ($billsWithoutCufe as $bill) {
+            try {
+                Log::info("Procesando factura con ID: {$bill->id}");
+
+                // Construcción y envío de datos
+                $data = $this->apiService->constructFacture($bill->reference_code);
+                return $data;
+                $response = $this->apiService->sendFacture($data);
+
+                // Validar la respuesta de la DIAN
+                if (!$response || empty($response)) {
+                    Log::warning("Respuesta inválida para factura ID: {$bill->id}");
+                    continue;
+                }
+
+                // Actualizar el CUFE en la base de datos
+                $bill->update(['cufe' => $response]);
+                Log::info("CUFE actualizado correctamente para factura ID: {$bill->id}");
+
+            } catch (\Exception $e) {
+                Log::error("Error procesando factura ID: {$bill->id}: " . $e->getMessage());
+            }
+        }
+
+        Log::info("Procesamiento completado");
+    }
 }
