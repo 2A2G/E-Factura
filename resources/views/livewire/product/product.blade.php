@@ -63,7 +63,7 @@
                                     {{ $product->quantity_products > 0 ? $product->quantity_products : 'Agotado' }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3 text-center">${{ number_format($product->quantity_products, 3) }}</td>
+                            <td class="px-4 py-3 text-center">${{ number_format($product->price_product, 3) }}</td>
 
 
                             <td class="px-4 py-3 text-center">

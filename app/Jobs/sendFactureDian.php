@@ -36,7 +36,7 @@ class SendFactureDian implements ShouldQueue
                 // Log::info('Construyendo Factura');
 
                 $data = $this->apiService->constructFacture($bill->reference_code);
-                // Log::info('Enviando factura');
+                Log::info('Enviando factura'. $data);
 
                 $response = $this->apiService->sendFacture($data);
                 // Log::info('Respuesta de la DIAN', ['response' => $response]);

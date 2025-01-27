@@ -20,13 +20,13 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen flex bg-gray-100">
+    <div class="min-h-screen flex flex-col md:flex-row bg-gray-100">
         <!-- Sidebar -->
-        <aside class="w-60 bg-white border-r shadow-md">
+        <aside class="w-full md:w-60 bg-white border-b md:border-r shadow-md">
             <x-sidebar-menu />
         </aside>
 
-        <main class="flex-1 p-6 ml-4">
+        <main class="flex-1 p-6 mx-auto">
             <div class="max-w-7xl mx-auto">
                 <div class="text-center">
                     {{ $slot }}
