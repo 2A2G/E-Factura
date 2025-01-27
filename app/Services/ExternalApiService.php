@@ -22,7 +22,7 @@ class ExternalApiService
     {
         $response = Http::withOptions([
             'verify' => false,
-        ])
+            ])
             ->asForm()
             ->post(env('url_api') . '/oauth/token', [
                 'grant_type' => env('grant_type'),
@@ -110,7 +110,7 @@ class ExternalApiService
                     "name" => $item->product->name_product,
                     "quantity" => $item->amount,
                     "discount_rate" => $item->discount_rate ?? 0,
-                    "price" => $item->total_price,
+                    "price" => $item->product->price_product,
                     "tax_rate" => "19.00",
                     "unit_measure_id" => "70",
                     "standard_code_id" => "1",

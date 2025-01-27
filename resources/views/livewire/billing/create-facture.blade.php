@@ -217,17 +217,6 @@
                             </div>
                         @endif
 
-                        @if ($selectedProduct)
-                            <div class="mb-4">
-                                <p><strong>Precio Unitario:</strong> ${{ $selectedProduct->price_product }}</p>
-                                <label for="quantity" class="block text-gray-600 font-semibold mb-2">Cantidad</label>
-                                <input type="number" id="quantity" wire:model="quantity"
-                                    class="border border-gray-300 rounded px-3 py-2 w-full" min="1">
-                                <button wire:click="addToCart"
-                                    class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Agregar</button>
-                            </div>
-                        @endif
-
                         <table class="w-full border-collapse border border-gray-300 mt-4">
                             <thead>
                                 <tr>
@@ -258,7 +247,8 @@
                         </table>
 
                         <div class="mt-4 text-right">
-                            <span class="font-bold text-lg">Total de la compra: ${{ $totalCartAmount }}</span>
+                            <span class="font-bold text-lg">Total de la compra:
+                                ${{ number_format($totalCartAmount, 3) }}</span>
                         </div>
                     </div>
                 @else
@@ -284,7 +274,7 @@
                                     class="border border-gray-300 rounded px-3 py-2 w-full">
                                     <option value="">Selecciona el tipo de tarjeta</option>
                                     <option value="48">Crédito</option>
-                                    <option value="debito">Débito</option>
+                                    <option value="39">Débito</option>
                                 </select>
                             </div>
 

@@ -69,6 +69,7 @@ class CreateFacture extends Component
             'phone_client',
             'address_client',
             'currentStep',
+            'cart'
         ]);
         $this->openPurchase = false;
     }
@@ -129,7 +130,7 @@ class CreateFacture extends Component
             return;
         }
 
-        $totalPrice = $product->price_product * $this->quantities;
+        $totalPrice = number_format($product->price_product * $this->quantities, 3);
 
         $this->cart[$productId] = [
             'id' => $product->id,
@@ -143,7 +144,7 @@ class CreateFacture extends Component
         $this->updateTotal();
         $this->searchResults = [];
         $this->searchQuery = '';
-        $this->quantities = 1;
+        $this->quantities = 0;
     }
 
     public function removeFromCart($productId)
@@ -226,9 +227,14 @@ class CreateFacture extends Component
 
                     $newPaymentMethod = new PaymentMethod();
                     $newPaymentMethod->bill_id = $newBill->id;
-                    $newPaymentMethod->payment_method = $this->payment_method;
                     $newPaymentMethod->bank_type = $this->bank_type;
                     $newPaymentMethod->credit_card_type = $this->credit_card_type;
+                    $newPaymentMethod->payment_method = $this->bank_type;
+                    if ($this->credit_card_type) {
+                        $newPaymentMethod->payment_method = $this->credit_card_type;
+                    } else {
+                        $newPaymentMethod->payment_method = $this->payment_method;
+                    }
 
                     if (!$newPaymentMethod->save()) {
                         throw new \Exception("Error al guardar el método de pago.");
