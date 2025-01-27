@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use App\Models\TypeProduct;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,13 +18,50 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'type_products_id' => TypeProduct::inRandomOrder()->first()->id ?? 1,
-            'code_product' => fake()->regexify('[A-Z]{3}-[0-9]{4}'),
-            'name_product' => fake()->words(3, true),
-            'price_product' => number_format(fake()->randomFloat(0, 2000, 100000), 0, ',', '.'),
-            'quantity_products' => fake()->numberBetween(1, 500),
+        // Lista de productos por categoría
+        $productsByCategory = [
+            'Medicamentos' => ['Aspirina', 'Paracetamol', 'Ibuprofeno'],
+            'Suplementos Dietéticos' => ['Proteína en polvo', 'BCAA', 'Omega-3'],
+            'Cosméticos' => ['Crema hidratante', 'Pintalabios', 'Base de maquillaje'],
+            'Cuidado Personal' => ['Cepillo de dientes', 'Jabón líquido', 'Desodorante'],
+            'Higiene y Limpieza' => ['Detergente', 'Limpiador multiusos', 'Toallitas húmedas'],
+            'Alimentos y Bebidas' => ['Soda', 'Galletas', 'Cereal'],
+            'Vitaminas' => ['Vitamina C', 'Multivitamínico', 'Magnesio'],
+            'Cuidado Infantil' => ['Pañales', 'Biberón', 'Leche infantil'],
+            'Productos para la Salud' => ['Termómetro', 'Oxímetro', 'Vendas'],
+            'Productos Naturales' => ['Aloe vera', 'Aceite de coco', 'Té verde'],
+            'Dispositivos Médicos' => ['Mascarilla', 'Termómetro digital', 'Saturómetro'],
+            'Herbolaria' => ['Valeriana', 'Manzanilla', 'Ginseng'],
+            'Perfumería' => ['Perfume floral', 'Colonia cítrica', 'Agua de colonia'],
+            'Productos de Belleza' => ['Crema antiarrugas', 'Exfoliante', 'Mascarilla facial'],
+            'Vendas y Curaciones' => ['Vendas elásticas', 'Curitas', 'Alcohol'],
+            'Bebidas Energéticas' => ['Red Bull', 'Monster', 'Burn'],
+            'Alimentos Especiales' => ['Alimentos sin gluten', 'Alimentos orgánicos', 'Alimentos veganos'],
+            'Productos de Aseo' => ['Limpiador de pisos', 'Desinfectante', 'Jabón antibacterial'],
+            'Farmacia' => ['Desinfectante', 'Termómetro', 'Antiséptico'],
+            'Cuidado Capilar' => ['Shampoo', 'Acondicionador', 'Mascarilla capilar'],
+            'Cuidado Bucal' => ['Cepillo eléctrico', 'Hilo dental', 'Enjuague bucal'],
+            'Cuidado de la Piel' => ['Crema solar', 'Tónico facial', 'Exfoliante facial'],
+            'Lentes y Gafas' => ['Lentes de sol', 'Gafas graduadas', 'Lentes de contacto'],
+            'Artículos de Oficina' => ['Lápiz', 'Carpeta', 'Resaltadores'],
+            'Vitamínicos' => ['Vitamina D', 'Vitamina E', 'Ácido fólico'],
+            'Productos para el Hogar' => ['Lampara LED', 'Alfombra', 'Extintor de fuego'],
+            'Aspirinas y Analgésicos' => ['Aspirina', 'Paracetamol', 'Ibuprofeno'],
+            'Cremas y Pomadas' => ['Pomada para quemaduras', 'Crema cicatrizante', 'Pomada antiinflamatoria'],
+            'Bebidas Saludables' => ['Jugo natural', 'Agua de coco', 'Té verde'],
         ];
 
+        $category = TypeProduct::inRandomOrder()->first();  // Obtener una categoría aleatoria
+
+        // Seleccionar un producto adecuado según la categoría
+        $productName = $this->faker->randomElement($productsByCategory[$category->product_type_name]);
+
+        return [
+            'type_products_id' => $category->id,
+            'code_product' => $this->faker->regexify('[A-Z]{3}-[0-9]{4}'),
+            'name_product' => $productName,
+            'price_product' => number_format($this->faker->randomFloat(2, 10, 500), 3,  '.'),
+            'quantity_products' => $this->faker->numberBetween(1, 500),
+        ];
     }
 }

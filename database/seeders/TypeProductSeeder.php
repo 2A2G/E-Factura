@@ -13,7 +13,6 @@ class TypeProductSeeder extends Seeder
      */
     public function run(): void
     {
-        TypeProduct::factory(10)->create();
-
+        TypeProduct::factory(28)->create();
     }
 }
