@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Bill;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class ExternalApiService
 {
@@ -22,7 +23,7 @@ class ExternalApiService
     {
         $response = Http::withOptions([
             'verify' => false,
-            ])
+        ])
             ->asForm()
             ->post(env('url_api') . '/oauth/token', [
                 'grant_type' => env('grant_type'),
@@ -134,13 +135,15 @@ class ExternalApiService
             ->withToken($token)
             ->post(env('url_api') . '/v1/bills/validate', $data);
 
+        // Log::info("Datos a recidos DIAN: " . json_encode($response, JSON_PRETTY_PRINT));
+
         if ($response->successful()) {
             return $response['data']['bill']['cufe'];
         }
 
-
         throw new \Exception('Error al enviar la factura: ' . $response->body());
     }
+
 
     public function getFacture()
     {

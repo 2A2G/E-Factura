@@ -47,35 +47,46 @@ class SendFactureDian implements ShouldQueue
      */
     public function handle()
     {
-        // Obtener todas las facturas pendientes de CUFE
-        $billsWithoutCufe = Bill::whereNull('cufe')->get();
+        Bill::whereNull('cufe')
+            ->chunk(100, function ($bills) {
+                Log::info("Iniciando el procesamiento de " . count($bills) . " facturas sin CUFE");
 
-        Log::info("Iniciando el procesamiento de {$billsWithoutCufe->count()} facturas sin CUFE");
+                // Usamos un array para almacenar los CUFE actualizados
+                $updatedBills = [];
 
-        foreach ($billsWithoutCufe as $bill) {
-            try {
-                Log::info("Procesando factura con ID: {$bill->id}");
+                foreach ($bills as $bill) {
+                    try {
+                        Log::info("Procesando factura con ID: {$bill->id}");
 
-                // Construcción y envío de datos
-                $data = $this->apiService->constructFacture($bill->reference_code);
-                return $data;
-                $response = $this->apiService->sendFacture($data);
+                        $data = $this->apiService->constructFacture($bill->reference_code);
+                        // Log::info("Datos a enviar: " . json_encode($data));
 
-                // Validar la respuesta de la DIAN
-                if (!$response || empty($response)) {
-                    Log::warning("Respuesta inválida para factura ID: {$bill->id}");
-                    continue;
+                        $cufe = $this->apiService->sendFacture($data);
+                        if (!$cufe || empty($data)) {
+                            Log::warning("Respuesta inválida para factura ID: {$bill->id}. Respuesta de la API: " . $data);
+                            continue;
+
+                        }
+
+                        $updatedBills[] = [
+                            'id' => $bill->id,
+                            'cufe' => $cufe,
+                        ];
+
+                        Log::info("CUFE actualizado correctamente para factura ID: {$bill->id}");
+
+                    } catch (\Exception $e) {
+                        Log::error("Error procesando factura ID: {$bill->id}: " . $e->getMessage());
+                    }
                 }
 
-                // Actualizar el CUFE en la base de datos
-                $bill->update(['cufe' => $response]);
-                Log::info("CUFE actualizado correctamente para factura ID: {$bill->id}");
+                foreach ($updatedBills as $updatedBill) {
+                    Bill::where('id', $updatedBill['id'])
+                        ->update(['cufe' => $updatedBill['cufe']]);
+                }
 
-            } catch (\Exception $e) {
-                Log::error("Error procesando factura ID: {$bill->id}: " . $e->getMessage());
-            }
-        }
-
-        Log::info("Procesamiento completado");
+                Log::info("Procesamiento completado para este lote");
+            });
     }
+
 }
