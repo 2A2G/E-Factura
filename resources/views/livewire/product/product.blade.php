@@ -209,7 +209,7 @@
                 <div class="mb-4">
                     <label for="code_product" class="block text-gray-600 font-semibold mb-2 text-left">Código del
                         Producto</label>
-                    <input id="code_product" type="text" wire:model="code_product"
+                    <input id="code_product" type="text" wire:model="code_product" disabled
                         class="border border-gray-300 rounded px-3 py-2 w-full" placeholder="Ejemplo: DVU-8896"
                         maxlength="8" oninput="formatCodeProduct(this)" pattern="^[A-Z0-9-]+$"
                         title="El código no puede contener espacios ni caracteres especiales">

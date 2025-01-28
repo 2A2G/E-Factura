@@ -65,7 +65,7 @@
                 </table>
             @endif
 
-            <div class="mt-6">
+            {{-- <div class="mt-6">
                 @if ($pagination['total'] > 0)
                     <div class="flex justify-between items-center">
                         <div class="flex space-x-4">
@@ -84,7 +84,7 @@
                         </div>
                     </div>
                 @endif
-            </div>
+            </div> --}}
         </div>
     </x-app-layout>
 </div>

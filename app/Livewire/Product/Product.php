@@ -52,20 +52,15 @@ class Product extends Component
         try {
             $this->validate([
                 'type_products_id' => 'required|integer',
-                'code_product' => 'required|regex:/^[A-Z0-9-]{8}$/',
+                'code_product' => 'required|max:10',
                 'name_product' => 'required|string|max:255',
                 'price_product' => 'required|integer|min:0',
                 'quantity_products' => 'required|integer|min:0',
             ]);
 
-            $formattedCode = strtoupper(preg_replace('/[^A-Z0-9]/', '', $this->code_product));
-            if (strlen($formattedCode) > 3) {
-                $formattedCode = substr($formattedCode, 0, 3) . '-' . substr($formattedCode, 3, 4);
-            }
-
             ModelsProduct::create([
                 'type_products_id' => $this->type_products_id,
-                'code_product' => $formattedCode,
+                'code_product' => $this->code_product,
                 'name_product' => $this->name_product,
                 'price_product' => $this->price_product,
                 'quantity_products' => $this->quantity_products,
@@ -76,7 +71,7 @@ class Product extends Component
 
         } catch (\Throwable $th) {
             $this->clearInputs();
-            $this->dispatch('post-error', name: "Hubo un error al registrar el producto. Intentelo nuevamente" . $th->getMessage());
+            $this->dispatch('post-error', name: "Hubo un error al registrar el producto. Intentelo nuevamente " . $th->getMessage());
         }
     }
 
@@ -112,7 +107,7 @@ class Product extends Component
         try {
             $this->validate([
                 'type_products_id' => 'required|integer',
-                'code_product' => 'required|regex:/^[A-Z0-9-]{8}$/',
+                'code_product' => 'required',
                 'name_product' => 'required|string|max:255',
                 'price_product' => 'required|integer|min:0',
                 'quantity_products' => 'required|integer|min:0',
@@ -126,14 +121,14 @@ class Product extends Component
                 return;
             }
 
-            $formattedCode = strtoupper(preg_replace('/[^A-Z0-9]/', '', $this->code_product));
-            if (strlen($formattedCode) > 3) {
-                $formattedCode = substr($formattedCode, 0, 3) . '-' . substr($formattedCode, 3, 4);
-            }
+            // $formattedCode = strtoupper(preg_replace('/[^A-Z0-9]/', '', $this->code_product));
+            // if (strlen($formattedCode) > 3) {
+            //     $formattedCode = substr($formattedCode, 0, 3) . '-' . substr($formattedCode, 3, 4);
+            // }
 
             $product->update([
                 'type_products_id' => $this->type_products_id,
-                'code_product' => $formattedCode,
+                'code_product' => $this->code_product,
                 'name_product' => $this->name_product,
                 'price_product' => $this->price_product,
                 'quantity_products' => $this->quantity_products,
