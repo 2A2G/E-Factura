@@ -54,8 +54,8 @@ class CreateFacture extends Component
         $apiService = new ExternalApiService();
         $apiService->isAutenticate();
         $this->totalAmount = Order::withTrashed()->sum('total_price');
-        $totalOrders = Order::withTrashed()->count();
-        $this->averagePurchase = $totalOrders > 0 ? $this->totalAmount / $totalOrders : 0;
+        $totalBills = Bill::withTrashed()->count();
+        $this->averagePurchase = $totalBills > 0 ? $this->totalAmount / $totalBills : 0;
         $this->products = Product::all();
     }
 
