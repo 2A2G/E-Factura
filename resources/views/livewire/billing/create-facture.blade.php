@@ -8,11 +8,11 @@
                 </div>
                 <div class="bg-white shadow rounded-lg p-4">
                     <h2 class="text-gray-600 text-lg font-medium">Monto Total</h2>
-                    <p class="text-2xl font-bold text-green-600">${{ number_format($totalAmount, 3) }}</p>
+                    <p class="text-2xl font-bold text-green-600">${{ number_format($totalAmount, 2) }}</p>
                 </div>
                 <div class="bg-white shadow rounded-lg p-4">
                     <h2 class="text-gray-600 text-lg font-medium">Promedio por Compra</h2>
-                    <p class="text-2xl font-bold text-purple-600">${{ number_format($averagePurchase, 3) }}</p>
+                    <p class="text-2xl font-bold text-purple-600">${{ number_format($averagePurchase, 2) }}</p>
                 </div>
             </div>
 
@@ -50,7 +50,7 @@
                                 </td>
                                 <td class="px-4 py-2">{{ $purchase->created_at->format('d/m/Y') }}</td>
                                 <td class="px-4 py-2 text-right">
-                                    ${{ number_format($purchase->orders->sum('total_price'), 3) }}</td>
+                                    ${{ number_format($purchase->orders->sum('total_price'), 2) }}</td>
                                 </td>
                                 <td class="px-4 py-2 text-center space-x-2">
                                     <a href="{{ route('viewFacture', $purchase->id) }}"
@@ -192,7 +192,7 @@
                                                 <td class="px-4 py-2">{{ $result['code_product'] }}</td>
                                                 <td class="px-4 py-2">{{ $result['name_product'] }}</td>
                                                 <td class="px-4 py-2">
-                                                    ${{ number_format($result['price_product'], 3) }}</td>
+                                                    ${{ number_format($result['price_product'], 2) }}</td>
 
                                                 <td class="px-4 py-2">
                                                     <input type="number" min="1"
@@ -248,7 +248,7 @@
 
                         <div class="mt-4 text-right">
                             <span class="font-bold text-lg">Total de la compra:
-                                ${{ number_format($totalCartAmount, 3) }}</span>
+                                ${{ number_format($totalCartAmount, 2) }}</span>
                         </div>
                     </div>
                 @else

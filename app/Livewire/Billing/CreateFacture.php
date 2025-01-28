@@ -54,8 +54,8 @@ class CreateFacture extends Component
         $apiService = new ExternalApiService();
         $apiService->isAutenticate();
         $this->totalAmount = Order::withTrashed()->sum('total_price');
-        $totalOrders = Order::withTrashed()->count();
-        $this->averagePurchase = $totalOrders > 0 ? $this->totalAmount / $totalOrders : 0;
+        $totalBills = Bill::withTrashed()->count();
+        $this->averagePurchase = $totalBills > 0 ? $this->totalAmount / $totalBills : 0;
         $this->products = Product::all();
     }
 
@@ -130,7 +130,7 @@ class CreateFacture extends Component
             return;
         }
 
-        $totalPrice = number_format($product->price_product * $this->quantities, 3);
+        $totalPrice = $product->price_product * $this->quantities;
 
         $this->cart[$productId] = [
             'id' => $product->id,
@@ -158,11 +158,13 @@ class CreateFacture extends Component
 
     public function calculateTotalCartAmount()
     {
+        // Sumar los totales de los productos en el carrito
         $this->totalCartAmount = array_sum(array_column($this->cart, 'total'));
     }
 
     private function updateTotal()
     {
+        // Sumar los totales de los productos en el carrito
         $this->totalCartAmount = array_sum(array_column($this->cart, 'total'));
     }
 

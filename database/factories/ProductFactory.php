@@ -60,7 +60,7 @@ class ProductFactory extends Factory
             'type_products_id' => $category->id,
             'code_product' => $this->faker->regexify('[A-Z]{3}-[0-9]{4}'),
             'name_product' => $productName,
-            'price_product' => number_format($this->faker->randomFloat(2, 10, 500), 3,  '.'),
+            'price_product' => (int) ($this->faker->randomFloat(2, 10, 500) * 100),
             'quantity_products' => $this->faker->numberBetween(1, 500),
         ];
     }

@@ -10,8 +10,6 @@ class Client extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'clients';
-
     protected $fillable = [
         'type_identity',
         'number_identity',
@@ -21,12 +19,13 @@ class Client extends Model
         'address_client'
     ];
 
-    public function order()
+    public function orders()
     {
-        $this->belongsTo(Order::class);
+        return $this->hasManyThrough(Order::class, Bill::class, 'client_id', 'bill_id');
     }
+
     public function bill()
     {
-        $this->hasMany(Bill::class);
+        return $this->hasMany(Bill::class);
     }
 }

@@ -23,28 +23,21 @@
                 <table class="min-w-full text-sm text-left text-gray-500">
                     <thead class="bg-gray-200">
                         <tr>
-                            {{-- <th class="px-6 py-4 font-medium text-gray-900">Tipo de Identidad</th> --}}
                             <th class="px-6 py-4 font-medium text-gray-900">Número de Identidad</th>
                             <th class="px-6 py-4 font-medium text-gray-900">Email</th>
                             <th class="px-6 py-4 font-medium text-gray-900">Nombre</th>
                             <th class="px-6 py-4 font-medium text-gray-900">Teléfono</th>
                             <th class="px-6 py-4 font-medium text-gray-900">Valor de la Compra</th>
-                            <th class="px-6 py-4 font-medium text-gray-900">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($clients as $client)
                             <tr class="border-t hover:bg-gray-50">
-                                {{-- <td class="px-6 py-4">{{ $client->type_identity }}</td> --}}
                                 <td class="px-6 py-4">{{ $client->number_identity }}</td>
                                 <td class="px-6 py-4">{{ $client->email_client }}</td>
                                 <td class="px-6 py-4">{{ $client->name_client }}</td>
                                 <td class="px-6 py-4">{{ $client->phone_client }}</td>
-                                <td class="px-6 py-4">{{ $client->purchases_count }}</td>
-                                <td class="px-6 py-4">
-                                    <button class="text-blue-500 hover:underline">Ver Detalles</button>
-                                    <button class="ml-2 text-red-500 hover:underline">Eliminar</button>
-                                </td>
+                                <td class="px-6 py-4">{{ number_format($client->total_purchase_value, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
