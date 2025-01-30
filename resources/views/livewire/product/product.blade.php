@@ -3,7 +3,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
                 <h3 class="text-xl font-semibold text-gray-700 mb-4">Total de Productos</h3>
-                <p class="mt-4 text-3xl font-bold text-blue-600">{{ count($products) }}</p>
+                <p class="mt-4 text-3xl font-bold text-blue-600">{{ $productD }}</p>
                 <p class="mt-2 text-gray-500">Total de productos.</p>
             </div>
 
@@ -31,11 +31,6 @@
             </div>
         </div>
 
-        <div class="bg-white p-4 rounded-lg shadow-lg border border-gray-200 mt-4">
-            <input type="text" class="w-full p-2 border border-gray-300 rounded-lg"
-                placeholder="Buscar por nombre de categoría..." wire:model="search">
-        </div>
-
         <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 mt-6">
             <table class="min-w-full text-sm text-left text-gray-500 border-collapse">
                 <thead class="bg-gray-200">
@@ -53,7 +48,7 @@
                     @foreach ($products as $product)
                         <tr class="border-t hover:bg-gray-50">
                             <td class="px-4 py-3 text-center font-medium text-gray-900">
-                                {{ $product->typeProduct->product_type_name }}
+                                {{ optional($product->typeProduct)->product_type_name ?? 'No Type' }}
                             </td>
                             <td class="px-4 py-3 text-center">{{ $product->code_product }}</td>
                             <td class="px-4 py-3 text-center">{{ $product->name_product }}</td>
