@@ -12,6 +12,8 @@ class Category extends Component
 {
     public $typeProduct;
     public $totalProduct;
+    public $totalTypeProduct;
+    public $typeProductActive;
     public $openCategory = false;
     public $openDeleteCategory = false;
     public $openUpdateCategory = false;
@@ -32,6 +34,8 @@ class Category extends Component
     public function mount()
     {
         $this->totalProduct = Product::withTrashed()->get();
+        $this->totalTypeProduct = TypeProduct::withTrashed()->get();
+        $this->typeProductActive = TypeProduct::whereNull('deleted_at')->count();
     }
 
     public function openModalCategory()
@@ -57,7 +61,6 @@ class Category extends Component
 
             $this->clearInputs();
             $this->openCategory = false;
-
 
         } catch (\Throwable $th) {
             $this->openCategory = false;

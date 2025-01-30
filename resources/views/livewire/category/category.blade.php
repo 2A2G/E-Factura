@@ -14,13 +14,13 @@
                     <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
                         <h2 class="text-xl font-semibold text-gray-700">Total de Categorías Activas</h2>
                         <p class="mt-4 text-3xl font-bold text-green-600">
-                            {{ \App\Models\TypeProduct::whereNull('deleted_at')->count() }}</p>
+                            {{ $typeProductActive }}</p>
                         <p class="mt-2 text-gray-500">Número total de categorías activas.</p>
                     </div>
 
                     <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
                         <h2 class="text-xl font-semibold text-gray-700">Total de Categorías</h2>
-                        <p class="mt-4 text-3xl font-bold text-blue-600">{{ count($typeProducts) }}</p>
+                        <p class="mt-4 text-3xl font-bold text-blue-600"> {{ count($totalTypeProduct) }}</p>
                         <p class="mt-2 text-gray-500">Número total de categorías.</p>
                     </div>
                 </div>

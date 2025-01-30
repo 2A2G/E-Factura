@@ -18,7 +18,6 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        // Lista de productos por categoría
         $productsByCategory = [
             'Medicamentos' => ['Aspirina', 'Paracetamol', 'Ibuprofeno'],
             'Suplementos Dietéticos' => ['Proteína en polvo', 'BCAA', 'Omega-3'],
@@ -51,9 +50,8 @@ class ProductFactory extends Factory
             'Bebidas Saludables' => ['Jugo natural', 'Agua de coco', 'Té verde'],
         ];
 
-        $category = TypeProduct::inRandomOrder()->first();  // Obtener una categoría aleatoria
+        $category = TypeProduct::inRandomOrder()->first();
 
-        // Seleccionar un producto adecuado según la categoría
         $productName = $this->faker->randomElement($productsByCategory[$category->product_type_name]);
 
         return [
