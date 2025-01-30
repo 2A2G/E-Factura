@@ -158,13 +158,11 @@ class CreateFacture extends Component
 
     public function calculateTotalCartAmount()
     {
-        // Sumar los totales de los productos en el carrito
         $this->totalCartAmount = array_sum(array_column($this->cart, 'total'));
     }
 
     private function updateTotal()
     {
-        // Sumar los totales de los productos en el carrito
         $this->totalCartAmount = array_sum(array_column($this->cart, 'total'));
     }
 
@@ -179,7 +177,6 @@ class CreateFacture extends Component
 
             DB::transaction(function () {
                 try {
-                    // Crear y guardar el cliente
                     $newClient = new Client();
                     $newClient->type_identity = $this->type_identity;
                     $newClient->number_identity = $this->number_identity;
@@ -192,10 +189,9 @@ class CreateFacture extends Component
                         throw new \Exception("Error al guardar el cliente.");
                     }
 
-                    $base = "EFactur_";
                     $newBill = new Bill();
                     $newBill->client_id = $newClient->id;
-                    $newBill->reference_code = $base . $newClient->id;
+                    $newBill->reference_code = "EF-" . mt_rand(1000, 9999) . $newClient->id;
 
                     if (!$newBill->save()) {
                         throw new \Exception("Error al guardar la factura.");

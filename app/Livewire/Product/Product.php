@@ -10,6 +10,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 class Product extends Component
 {
     public $typeProducts;
+    public $productD;
     public $productExhausted;
     public $type_products_id;
     public $code_product;
@@ -24,6 +25,7 @@ class Product extends Component
     public function mount()
     {
         $this->productExhausted = ModelsProduct::where('quantity_products', 0)->count();
+        $this->productD = ModelsProduct::withTrashed()->count();
         $this->typeProducts = TypeProduct::all();
     }
 
@@ -121,11 +123,6 @@ class Product extends Component
                 return;
             }
 
-            // $formattedCode = strtoupper(preg_replace('/[^A-Z0-9]/', '', $this->code_product));
-            // if (strlen($formattedCode) > 3) {
-            //     $formattedCode = substr($formattedCode, 0, 3) . '-' . substr($formattedCode, 3, 4);
-            // }
-
             $product->update([
                 'type_products_id' => $this->type_products_id,
                 'code_product' => $this->code_product,
@@ -191,8 +188,6 @@ class Product extends Component
             $this->clearInputs();
             throw $th;
         }
-
-
 
     }
 
