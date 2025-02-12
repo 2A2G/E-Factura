@@ -53,7 +53,7 @@ Puedes comunicarte con Halltec a través de los siguientes enlaces:
 
 A continuación, se muestra el certificado obtenido al culminar el reto:
 
-![Certificado de Reto Culminado](https://private-user-images.githubusercontent.com/112210730/412261969-b472f209-bf69-4664-9233-3232e231f04e.png)
+![Certificado de Reto Culminado](https://github.com/2A2G/E-Factura/blob/main/public/CERTIFICADOS%20HALLTEC%20Y%20FACTUS%20ALDAIR%20GUTIERREZ.png?raw=true)
 
 ## Colaboración y Desarrollo
 
