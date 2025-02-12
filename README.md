@@ -49,6 +49,12 @@ Puedes comunicarte con Halltec a través de los siguientes enlaces:
 -   **Sitio Oficial Factus**: [factus.com.co](https://www.factus.com.co/)
 -   **Instagram Halltec**: [@halltec](https://www.instagram.com/halltec/)
 
+## Certificado de Finalización
+
+A continuación, se muestra el certificado obtenido al culminar el reto:
+
+![Certificado de Reto Culminado](https://private-user-images.githubusercontent.com/112210730/412261969-b472f209-bf69-4664-9233-3232e231f04e.png)
+
 ## Colaboración y Desarrollo
 
 El proyecto está abierto a contribuciones de la comunidad. Si deseas participar o reportar algún problema, puedes visitar el repositorio oficial en GitHub del usuario [@2A2G](https://github.com/2A2G).
